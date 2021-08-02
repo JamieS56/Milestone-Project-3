@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Login</h1>
+
+<div class="row">
+    <form class="col s12"  method="POST" action="{{ url_for('login') }}">
+      <div class="row">
+        <div class="input-field col s12">
+          <input placeholder="Username" id="username" name='username' type="text" class="validate">
+          <label for="username">Username</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="password" type="password" name='password' class="validate">
+          <label for="password">Password</label>
+        </div>
+      </div>
+      <button class="btn waves-effect waves-light" type="submit" name="action">Login
+      </button>
+    </form>
+  </div>
+  
+  <a href='{{ url_for("register") }}'>Don't have an account? Sign up!</a>
+{% endblock %}

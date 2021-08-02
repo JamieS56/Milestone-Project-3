@@ -1,14 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <!-- Materialize cdn links -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-        Hi World
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+
+    <script src="../static/script.js"></script>
+    <link rel="stylesheet" href="../static/style.css">
+
+    <title>DIB</title>
+</head>
+
+<body>
+    <header>
+        <!-- navbar taken from materialize and using the jinja from the Task Managaer Project to set the navbar depending on who is logged in.-->
+        <!-- top navbar -->
+        <nav class="nav-extended text-shadow light-blue darken-1">
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo">Driving Lesson Booking</a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li>
+                        <h4 class="center-align light-blue-text text-darken 4">Driving Lesson Booking</h4>
+                    </li>
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    {% if session.user %}
+                        <li><a href="{{ url_for('bookLesson', username=session['user']) }}">Book a Lesson</a></li>
+                        <li><a href="{{ url_for('viewBookings', username=session['user']) }}">My Bookings</a></li>
+                        {% if session.accountType == "instructor"%}
+                            <li><a href="{{ url_for('bookingCalender', username=session['user']) }}">Booking Callender</a></li>
+                        {% endif %}
+                        {% if session.accountType == "admin" %}
+                            <li><a href="{{ url_for('bookingCalender', username=session['user']) }}">Booking Calender</a></li>
+                            <li><a href="{{ url_for('userManager') }}">User Manager</a></li>
+                        {% endif %}
+                        
+                        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                        {% else %}
+                        <li><a href="{{ url_for('login') }}">Log In</a></li>
+                        <li><a href="{{ url_for('register') }}">Create Account</a></li>
+                        {% endif %}
+                </ul>
+            </div>
+        </nav>
+
+        <!-- mobile sidenav -->
+        <ul class="sidenav" id="mobile-demo">
+            <li>
+                <h4 class="center-align light-blue-text text-darken 4">Driving Lesson Booking</h4>
+            </li>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            {% if session.user %}
+                <li><a href="{{ url_for('bookLesson', username=session['user']) }}">Book a Lesson</a></li>
+                <li><a href="{{ url_for('viewBookings', username=session['user']) }}">My Bookings</a></li>
+                {% if session.accountType == "instructor"%}
+                    <li><a href="{{ url_for('bookingCalender', username=session['user']) }}">Booking Callender</a></li>
+                {% endif %}
+                {% if session.accountType == "admin" %}
+                    <li><a href="{{ url_for('bookingCalender', username=session['user']) }}">Booking Calender</a></li>
+                    <li><a href="{{ url_for('userManager') }}">User Manager</a></li>
+                {% endif %}
+                
+                <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                {% else %}
+                <li><a href="{{ url_for('login') }}">Log In</a></li>
+                <li><a href="{{ url_for('register') }}">Create Account</a></li>
+                {% endif %}
+        </ul>
+    </header>
+
+    <section>
+        <!-- flash messages -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="row flashes">
+            <h4 class="light-blue lighten-4 center-align">{{ message }}</h4>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </section>
+
+    <main class="container center-align">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="page-footer text-shadow light-blue darken-1">
+        <div class="container">
+            <div class="row valign-wrapper">
+                <div class="col l6 s12">
+                    <div class="row valign-wrapper">
+                        <div class="col s6"><i class="fas fa-phone"></i> 0111198760542</div>
+                        <div class="col s6"><i class="fas fa-envelope"></i> instructors@gmail.com</div>
+                    </div>
+                </div>
+                <div class="col l6 s12 ">
+                    <div class="col right"><i class="fab fa-facebook fa-2x"></i></div>
+                    <div class="col right"><i class="fab fa-twitter fa-2x"></i></div>
+                    <div class="col right"><i class="fab fa-instagram fa-2x"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2014 Copyright Text
+            </div>
+        </div>
+    </footer>
 
 </body>
+
 </html>

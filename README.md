@@ -10,3 +10,8 @@ The owner would like to:
 The Customers needs are too:
     book lessons
     view when booked lessons are
+
+
+## Testing
+### Testing sidenav
+The sidenav that is used so mobile users can access the menu wasn't working. This was because jquery wasn't connected so addded it to the base html and works now.
