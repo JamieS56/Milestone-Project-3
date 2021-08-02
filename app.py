@@ -53,7 +53,7 @@ def register():
             "email": request.form.get("email"),
             "accountType": "user",
         }
-        mongo.db.customers.insert_one(register)
+        mongo.db.users.insert_one(register)
 
         # put the new user into 'session' cookie
         session["user"] = request.form.get("username")
@@ -68,14 +68,14 @@ def register():
 def login():
     if request.method == "POST":
         # check if username exists in db
-        existing_user = mongo.db.customers.find_one(
+        existing_user = mongo.db.users.find_one(
             {"username": request.form.get("username").lower()})
 
         if existing_user:
             # ensure hashed password matches user input
             if check_password_hash(existing_user["password"], request.form.get("password")):
                 session["user"] = request.form.get("username").lower()
-                session["accountType"] = mongo.db.customers.find_one({'username': session["user"]})['accountType']
+                session["accountType"] = mongo.db.users.find_one({'username': session["user"]})['accountType']
                 flash("Welcome, {}".format(request.form.get("username")))
                 print(session['accountType'])
                 print(session['user'])
