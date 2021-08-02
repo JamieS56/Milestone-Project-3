@@ -23,6 +23,7 @@ def home():
     return render_template('home.html')
 
 
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -135,11 +136,23 @@ def bookingCalender(username):
 
 @app.route("/userManager", methods=["GET", "POST"])
 def userManager():
+    users = list(mongo.db.users.find())
+    return render_template("userManager.html", users=users)
 
-    if session["user"]:
-        return render_template("userManager.html")
 
-    return redirect(url_for("login"))
+
+
+@app.route("/get_users")
+def get_users():
+    users = list(mongo.db.users.find().sort("username", 1))
+    return render_template("userManager.html", users=users)
+
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    query = request.form.get("query")
+    users = list(mongo.db.users.find({"$text": {"$search": query}}))
+    return render_template("userManager.html", users=users)
 
 
 if __name__ == "__main__":

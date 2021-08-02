@@ -2,11 +2,47 @@
 {% block content %}
 <h1>User Manager</h1>
 
-<div>
-    search bar
+<div class="row card-panel grey lighten-5">
+    <form action="{{ url_for('search') }}" method="post" class="col s12">
+        <div class="row valign-wrapper center-align">
+            <div class="input-field col s12 m8">
+                <i class="fas fa-search prefix light-blue-text text-darken-4"></i>
+                <input type="text" name="query" id="query" minlength="3" class="validate" required>
+                <label for="query">Search Users</label>
+            </div>
+            <div class="col s12 m4">
+                <a href="{{ url_for('get_users') }}" class="red btn text-shadow">Reset</a>
+                <button type="submit" class="light-blue darken-1 btn text-shadow">
+                    <i class="fas fa-search left"></i> Search
+                </button>
+            </div>
+        </div>
+    </form>
 </div>
-<div>
-    a list of cards each is a user which cand be edited/ made an instructor or admin.
-</div>
+
+{% if users|length > 0 %}
+<ul class="collapsible">
+    {% for user in users %}
+    <li>
+        <div class="collapsible-header white-text light-blue darken-4 text-shadow">
+            <div class="col s3">
+                <i class="fas fa-caret-down"></i>
+                <a href="" class="btn-small green accent-4 right-align">Done</a>
+                <a href="" class="btn-small light-blue lighten-1 right-align">Edit</a>
+            </div>
+            <div class="col s9">
+                <strong>{{ user.username }}</strong>
+            </div>
+        </div>
+        <div class="collapsible-body">
+            <strong>{{ user.username }}</strong>
+            <p>{{ user.accountType }}</p>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<h3 class="red-text text-darken-4 center-align">No Results Found</h3>
+{% endif %}
 
 {% endblock %}
