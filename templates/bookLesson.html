@@ -4,7 +4,22 @@
 <h1>Book a Lesson</h1>
 
 <div>
-    a day selector on the left that when you click on it, it loads availabe times on that day for different instructors on the right.
+    <form>
+        <div class="col">
+            <select class="browser-default" name="accountType">
+                <option value="" disabled selected>Choose instructor</option>
+                {% for user in users %}
+                    {% if user.accountType == 'instructor' %}
+                        <option value="{{ user.accountType }}">{{ user.firstName }} {{ user.lastName }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+        </div>
+        <div class="col">
+
+        </div>
+    </form>
 </div>
 
 {% endblock %}

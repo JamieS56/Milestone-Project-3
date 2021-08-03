@@ -119,7 +119,9 @@ def bookLesson(username):
     username = session["user"]
 
     if session["user"]:
-        return render_template("bookLesson.html", username=username)
+        users = list(mongo.db.users.find())
+
+        return render_template("bookLesson.html", username=username, users=users)
 
     return redirect(url_for("login"))
 
