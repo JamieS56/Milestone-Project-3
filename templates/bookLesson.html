@@ -6,17 +6,29 @@
 <div>
     <form>
         <div class="col">
-            <select class="browser-default" name="accountType">
-                <option value="" disabled selected>Choose instructor</option>
-                {% for user in users %}
+            <div class="row">
+                <select class="browser-default" name="accountType">
+                    <option value="" disabled selected>Choose instructor</option>
+                    {% for user in users %}
                     {% if user.accountType == 'instructor' %}
-                        <option value="{{ user.accountType }}">{{ user.firstName }} {{ user.lastName }}</option>
+                    <option value="{{ user.username }}">{{ user.firstName }} {{ user.lastName }}</option>
                     {% endif %}
-                {% endfor %}
-            </select>
+                    {% endfor %}
+                </select>
+            </div>
+            <div id='datePickerDiv' class="row">
+                <input type="text" class="datepicker">
+            </div>
 
         </div>
         <div class="col">
+            <button>9:00 - 10:00</button>
+            <button>10:00 - 11:00</button>
+            <button>11:00 - 12:00</button>
+            <button>13:00 - 14:00</button>
+            <button>14:00 - 15:00</button>
+            <button>15:00 - 16:00</button>
+            <button>16:00 - 17:00</button>
 
         </div>
     </form>
