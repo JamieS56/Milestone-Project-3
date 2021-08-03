@@ -12,5 +12,11 @@ $(document).ready(function () {
             done: "Select"
         }
     })
+
+    $(".editUserButton").click(function(){
+        $('.input-field').children(':disabled').removeAttr('disabled')
+        $('select').removeAttr('disabled')
+    })
+    
 })
 

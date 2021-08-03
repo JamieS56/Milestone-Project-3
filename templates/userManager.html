@@ -27,16 +27,64 @@
         <div class="collapsible-header white-text light-blue darken-4 text-shadow">
             <div class="col s3">
                 <i class="fas fa-caret-down"></i>
-                <a href="" class="btn-small green accent-4 right-align">Done</a>
-                <a href="" class="btn-small light-blue lighten-1 right-align">Edit</a>
+
             </div>
             <div class="col s9">
                 <strong>{{ user.username }}</strong>
             </div>
         </div>
         <div class="collapsible-body">
-            <strong>{{ user.username }}</strong>
-            <p>{{ user.accountType }}</p>
+            <form class="col s12 editUserForm" method="POST" action="{{ url_for('edit_user', user_id=user._id) }}">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input value="{{ user.firstName }}" id="first_name" name='first_name' type="text"
+                            class="validate" disabled="disabled">
+                        <label for="first_name">First Name</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input value="{{ user.lastName }}" id="last_name" name='last_name' type="text" class="validate"
+                            disabled="disabled">
+                        <label for="last_name">Last Name</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input value="{{ user.phoneNumber }}" id="phone-number" name='phone-number' type="text"
+                            class="validate" disabled>
+                        <label for="phone-number">Phone</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input value="{{ user.email }}" id="email" name='email' type="email" class="validate" disabled>
+                        <label for="email">Email</label>
+                    </div>
+                </div>
+                <div class="input-field col s12">
+                    <input value="{{ user.username }}" id="username" name='username' type="text" class="validate"
+                        required disabled>
+                    <label for="username">Username</label>
+                </div>
+                
+                <div class="col s12">
+                    <label>Account Type</label>
+                    <select class="browser-default" name="accountType" disabled>
+                        <option value="{{ user.accountType }}" disabled selected>{{ user.accountType }}</option>
+                        <option value="customer">Customer</option>
+                        <option value="instructor">Instructor</option>
+                        <option value="admin">Admin</option>
+                    </select>
+
+                </div>
+
+                <button type="submit" class="col s12 btn-large light-blue darken-4 text-shadow" required>
+                    Submit
+                </button>
+            </form>
+
+
+            <button class="btn-small light-blue lighten-1 right-align editUserButton">Edit</button>
+
         </div>
     </li>
     {% endfor %}

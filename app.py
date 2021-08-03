@@ -52,7 +52,7 @@ def register():
             "lastName": request.form.get("last_name"),
             "phoneNumber": request.form.get("phone-number"),
             "email": request.form.get("email"),
-            "accountType": "user",
+            "accountType": "customer",
         }
         mongo.db.users.insert_one(register)
 
@@ -152,6 +152,25 @@ def get_users():
 def search():
     query = request.form.get("query")
     users = list(mongo.db.users.find({"$text": {"$search": query}}))
+    return render_template("userManager.html", users=users)
+
+
+@app.route("/edit_user/<user_id>", methods=["GET", "POST"])
+def edit_user(user_id):
+    if request.method == "POST":
+        submit = {
+            "username": request.form.get("username").lower(),
+            "firstName": request.form.get("first_name"),
+            "lastName": request.form.get("last_name"),
+            "phoneNumber": request.form.get("phone-number"),
+            "email": request.form.get("email"),
+            "accountType": request.form.get("accountType"),
+        }
+        mongo.db.users.update({"_id": ObjectId(user_id)}, submit)
+        flash("User profile Successfully Updated")
+        return redirect(url_for("userManager"))
+
+    users = list(mongo.db.users.find().sort("username", 1))
     return render_template("userManager.html", users=users)
 
 
