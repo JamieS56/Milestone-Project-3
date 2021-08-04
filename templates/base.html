@@ -17,38 +17,36 @@
     <script src="../static/script.js"></script>
     <link rel="stylesheet" href="../static/style.css">
 
-    <title>DIB</title>
+    <title>DLB</title>
 </head>
 
 <body>
     <header>
         <!-- navbar taken from materialize and using the jinja from the Task Managaer Project to set the navbar depending on who is logged in.-->
         <!-- top navbar -->
-        <nav class="nav-extended text-shadow light-blue darken-1">
+        <nav class="nav-extended light-blue darken-1">
             <div class="nav-wrapper">
-                <a href="#" class="brand-logo">Driving Lesson Booking</a>
+                <a href="{{ url_for('home') }}" class="brand-logo hide-on-small-only">Driving Lesson Booking</a>
+                <a href="{{ url_for('home') }}" class="brand-logo hide-on-med-and-up">DLB</a>
                 <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
                 <ul class="right hide-on-med-and-down">
-                    <li>
-                        <h4 class="center-align light-blue-text text-darken 4">Driving Lesson Booking</h4>
-                    </li>
                     <li><a href="{{ url_for('home') }}">Home</a></li>
                     {% if session.user %}
-                        <li><a href="{{ url_for('bookLesson', username=session['user']) }}">Book a Lesson</a></li>
-                        <li><a href="{{ url_for('viewBookings', username=session['user']) }}">My Bookings</a></li>
-                        {% if session.accountType == "instructor"%}
-                            <li><a href="{{ url_for('bookingCalender', username=session['user']) }}">Booking Callender</a></li>
-                        {% endif %}
-                        {% if session.accountType == "admin" %}
-                            <li><a href="{{ url_for('bookingCalender', username=session['user']) }}">Booking Calender</a></li>
-                            <li><a href="{{ url_for('userManager') }}">User Manager</a></li>
-                        {% endif %}
-                        
-                        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-                        {% else %}
-                        <li><a href="{{ url_for('login') }}">Log In</a></li>
-                        <li><a href="{{ url_for('register') }}">Create Account</a></li>
-                        {% endif %}
+                    <li><a href="{{ url_for('bookLesson', username=session['user']) }}">Book a Lesson</a></li>
+                    <li><a href="{{ url_for('viewBookings', username=session['user']) }}">My Bookings</a></li>
+                    {% if session.accountType == "instructor"%}
+                    <li><a href="{{ url_for('bookingCalender', username=session['user']) }}">Booking Callender</a></li>
+                    {% endif %}
+                    {% if session.accountType == "admin" %}
+                    <li><a href="{{ url_for('bookingCalender', username=session['user']) }}">Booking Calender</a></li>
+                    <li><a href="{{ url_for('userManager') }}">User Manager</a></li>
+                    {% endif %}
+
+                    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('login') }}">Log In</a></li>
+                    <li><a href="{{ url_for('register') }}">Create Account</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
@@ -60,21 +58,21 @@
             </li>
             <li><a href="{{ url_for('home') }}">Home</a></li>
             {% if session.user %}
-                <li><a href="{{ url_for('bookLesson', username=session['user']) }}">Book a Lesson</a></li>
-                <li><a href="{{ url_for('viewBookings', username=session['user']) }}">My Bookings</a></li>
-                {% if session.accountType == "instructor"%}
-                    <li><a href="{{ url_for('bookingCalender', username=session['user']) }}">Booking Callender</a></li>
-                {% endif %}
-                {% if session.accountType == "admin" %}
-                    <li><a href="{{ url_for('bookingCalender', username=session['user']) }}">Booking Calender</a></li>
-                    <li><a href="{{ url_for('userManager') }}">User Manager</a></li>
-                {% endif %}
-                
-                <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-                {% else %}
-                <li><a href="{{ url_for('login') }}">Log In</a></li>
-                <li><a href="{{ url_for('register') }}">Create Account</a></li>
-                {% endif %}
+            <li><a href="{{ url_for('bookLesson', username=session['user']) }}">Book a Lesson</a></li>
+            <li><a href="{{ url_for('viewBookings', username=session['user']) }}">My Bookings</a></li>
+            {% if session.accountType == "instructor"%}
+            <li><a href="{{ url_for('bookingCalender', username=session['user']) }}">Booking Callender</a></li>
+            {% endif %}
+            {% if session.accountType == "admin" %}
+            <li><a href="{{ url_for('bookingCalender', username=session['user']) }}">Booking Calender</a></li>
+            <li><a href="{{ url_for('userManager') }}">User Manager</a></li>
+            {% endif %}
+
+            <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+            {% else %}
+            <li><a href="{{ url_for('login') }}">Log In</a></li>
+            <li><a href="{{ url_for('register') }}">Create Account</a></li>
+            {% endif %}
         </ul>
     </header>
 
@@ -96,20 +94,19 @@
         {% endblock %}
     </main>
 
-    <footer class="page-footer text-shadow light-blue darken-1">
+    <footer class="page-footer light-blue darken-1">
         <div class="container">
             <div class="row valign-wrapper">
-                <div class="col l6 s12">
-                    <div class="row valign-wrapper">
-                        <div class="col s6"><i class="fas fa-phone"></i> 0111198760542</div>
-                        <div class="col s6"><i class="fas fa-envelope"></i> instructors@gmail.com</div>
-                    </div>
-                </div>
-                <div class="col l6 s12 ">
-                    <div class="col right"><i class="fab fa-facebook fa-2x"></i></div>
-                    <div class="col right"><i class="fab fa-twitter fa-2x"></i></div>
-                    <div class="col right"><i class="fab fa-instagram fa-2x"></i></div>
-                </div>
+                <div class="col s12 m6">
+                <div class="col"><i class="fas fa-phone"></i> 0111198760542</div>
+                <div class="col"><i class="fas fa-envelope"></i> DLB@gmail.com</div>
+            </div>
+            
+            <div class="col s12 m6 ">
+                <div class="col s4 m2 right"><i class="fab fa-facebook fa-2x"></i></div>
+                <div class="col s4 m2 right"><i class="fab fa-twitter fa-2x"></i></div>
+                <div class="col s4 m2 right"><i class="fab fa-instagram fa-2x"></i></div>
+            </div>
             </div>
         </div>
         <div class="footer-copyright">

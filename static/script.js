@@ -11,13 +11,17 @@ $(document).ready(function () {
         i18n: {
             done: "Select"
         },
-        isRTL: true
+        
     })
+
+    // The edit users button that removes the disabled attribute.
 
     $(".editUserButton").click(function(){
         $('.input-field').children(':disabled').removeAttr('disabled')
         $('select').removeAttr('disabled')
     })
+
+
     
 })
 

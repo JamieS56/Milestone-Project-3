@@ -5,7 +5,7 @@
 
 <div>
     <form>
-        <div class="col">
+        <div class="col m6">
             <div class="row">
                 <select class="browser-default" name="accountType">
                     <option value="" disabled selected>Choose instructor</option>
@@ -16,20 +16,18 @@
                     {% endfor %}
                 </select>
             </div>
-            <div id='datePickerDiv' class="row">
-                <input type="text" class="datepicker">
+            <div id='date-picker-div' class="row">
+                <input id="lesson-booking-date-picker" type="text" class="datepicker">
             </div>
 
         </div>
-        <div class="col">
-            <button>9:00 - 10:00</button>
-            <button>10:00 - 11:00</button>
-            <button>11:00 - 12:00</button>
-            <button>13:00 - 14:00</button>
-            <button>14:00 - 15:00</button>
-            <button>15:00 - 16:00</button>
-            <button>16:00 - 17:00</button>
-
+        <div class="col m6">
+            <a class="waves-effect waves-light btn-large" value="10:00 - 11:00">10:00 - 11:00</a>
+            <a class="waves-effect waves-light btn-large" value="11:00 - 12:00">11:00 - 12:00</a>
+            <a class="waves-effect waves-light btn-large" value="13:00 - 14:00">13:00 - 14:00</a>
+            <a class="waves-effect waves-light btn-large" value="14:00 - 15:00">14:00 - 15:00</a>
+            <a class="waves-effect waves-light btn-large" value="15:00 - 16:00">15:00 - 16:00</a>
+            <a class="waves-effect waves-light btn-large" value="16:00 - 17:00">16:00 - 17:00</a>
         </div>
     </form>
 </div>
