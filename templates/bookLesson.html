@@ -3,11 +3,20 @@
 
 <h1>Book a Lesson</h1>
 
+<nav>
+    <div class="nav-wrapper">
+      <div class="col s12">
+        <a href="{{ url_for('bookLesson', username=session['user']) }}" class="breadcrumb">Choose Instructor</a>
+
+      </div>
+    </div>
+</nav>
+
 <div>
-    <form>
+    <form class="col s12" method="POST" action="{{ url_for('bookLesson', username=session['user']) }}">
         <div class="col m6">
             <div class="row">
-                <select class="browser-default" name="accountType">
+                <select class="browser-default" name="instructor">
                     <option value="" disabled selected>Choose instructor</option>
                     {% for user in users %}
                     {% if user.accountType == 'instructor' %}
@@ -16,19 +25,17 @@
                     {% endfor %}
                 </select>
             </div>
+            <label>choose a day</label>
             <div id='date-picker-div' class="row">
-                <input id="lesson-booking-date-picker" type="text" class="datepicker">
+                <input id="lesson-booking-date-picker" name='date' type="text" class="datepicker">
             </div>
 
         </div>
-        <div class="col m6">
-            <a class="waves-effect waves-light btn-large" value="10:00 - 11:00">10:00 - 11:00</a>
-            <a class="waves-effect waves-light btn-large" value="11:00 - 12:00">11:00 - 12:00</a>
-            <a class="waves-effect waves-light btn-large" value="13:00 - 14:00">13:00 - 14:00</a>
-            <a class="waves-effect waves-light btn-large" value="14:00 - 15:00">14:00 - 15:00</a>
-            <a class="waves-effect waves-light btn-large" value="15:00 - 16:00">15:00 - 16:00</a>
-            <a class="waves-effect waves-light btn-large" value="16:00 - 17:00">16:00 - 17:00</a>
-        </div>
+
+        <button type="submit" class="col s12 btn-large light-blue darken-4 text-shadow" required>
+            Submit
+        </button>
+
     </form>
 </div>
 

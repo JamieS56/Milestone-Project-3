@@ -37,7 +37,6 @@ def register():
             flash("Username already exists")
             return redirect(url_for("register"))
 
-        print("hi")
         password = request.form.get("password")
         confirmPassword = request.form.get("confirm-password")
 
@@ -116,14 +115,47 @@ def viewBookings(username):
 
 @app.route("/bookLesson/<username>", methods=["GET", "POST"])
 def bookLesson(username):
-    username = session["user"]
-
+    # this is a list of the bookable times to the user to compare to what is already booked in the database. in the future it will be able to be set by the instructor and fetched from the database.
+    allTimes = ['10:00-11:00', '11:00-12:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00']
+    print('hi')
     if session["user"]:
         users = list(mongo.db.users.find())
+        if request.method == "POST":
+            booking = {                                                   # getting the info from the form to query the db
+                'instructor': request.form.get('instructor'),
+                'student': session['user'],
+                'date': request.form.get('date')
+            }
+           # mongo.db.bookings.insert_one(booking)
 
-        return render_template("bookLesson.html", username=username, users=users)
+            bookedTimes = list(mongo.db.bookings.find({'instructor': request.form.get('instructor'), 'date': request.form.get('date')}, {'timeSlot': 1}))   #querying the db and retreiving what times have been booked for the selected instructor on the selected day.
+
+            if len(bookedTimes) < len(allTimes):                                 # This is removing the booked times from the bookable times list.
+                for x in allTimes:
+                    print(x)
+                    for y in bookedTimes:
+                        print(y)
+                        if x == y:
+                            allTimes.remove(x)
+
+                bookableTimes = allTimes
+
+            else:
+                bookableTimes = list('Fully Booked')
+
+            print(bookableTimes)
+            return redirect(url_for("bookLessonTime", username=session["user"], bookableTimes=bookableTimes))
+
+        return render_template('bookLesson.html', users=users)
 
     return redirect(url_for("login"))
+
+
+@app.route("/bookLesson_time/<username>/<bookableTimes>/", methods=["GET", "POST"])
+def bookLessonTime(username, bookableTimes):
+
+
+    return render_template('bookLessonTime.html', username=session["user"], bookableTimes=bookableTimes)
 
 
 @app.route("/bookingCalender/<username>", methods=["GET", "POST"])

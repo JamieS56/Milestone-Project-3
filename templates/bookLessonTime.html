@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Book a Lesson</h1>
+<nav>
+    <div class="nav-wrapper">
+      <div class="col s12">
+        <a href="{{ url_for('bookLesson', username=session['user']) }}" class="breadcrumb">Choose Instructor</a>
+        <a href="#!" class="breadcrumb">Choose Time</a>
+      </div>
+    </div>
+</nav>
+
+<form>
+    <select class="browser-default" name="bookingTime">
+        <option value="" disabled selected>Choose a Time</option>
+        {% for times in bookableTimes %}
+            <option value="{{ times }}">{{ times }}</option>
+        {% endfor %}
+    </select>
+
+
+</form>
+
+{% endblock %}
