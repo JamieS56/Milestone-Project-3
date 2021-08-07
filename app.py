@@ -115,22 +115,22 @@ def viewBookings(username):
 
 @app.route("/bookLesson/<username>", methods=["GET", "POST"])
 def bookLesson(username):
+    print('pageloaded')
     # this is a list of the bookable times to the user to compare to what is already booked in the database. in the future it will be able to be set by the instructor and fetched from the database.
     allTimes = ['10:00-11:00', '11:00-12:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00']
-    print('hi')
-    if session["user"]:
-        users = list(mongo.db.users.find())
+    if session["user"]:  #checks if user is logged in
+        users = list(mongo.db.users.find())  # Gets list of users to get the driving instructor select input 
         if request.method == "POST":
-            booking = {                                                   # getting the info from the form to query the db
+            booking = {                                                   # The dictionary that will be submitted in the final form to the db
                 'instructor': request.form.get('instructor'),
                 'student': session['user'],
                 'date': request.form.get('date')
             }
-           # mongo.db.bookings.insert_one(booking)
+            # mongo.db.bookings.insert_one(booking)
 
-            bookedTimes = list(mongo.db.bookings.find({'instructor': request.form.get('instructor'), 'date': request.form.get('date')}, {'timeSlot': 1}))   #querying the db and retreiving what times have been booked for the selected instructor on the selected day.
-
-            if len(bookedTimes) < len(allTimes):                                 # This is removing the booked times from the bookable times list.
+            bookedTimes = list(mongo.db.bookings.find({'instructor': request.form.get('instructor'), 'date': request.form.get('date')}, {'timeSlot': 1}))   # querying the db and retreiving what times have been booked for the selected instructor on the selected day.
+            print(bookedTimes)
+            if len(bookedTimes) < len(allTimes):             # This is removing the booked times from the all times list which will then get sent to Driving lesson times
                 for x in allTimes:
                     print(x)
                     for y in bookedTimes:
@@ -141,9 +141,9 @@ def bookLesson(username):
                 bookableTimes = allTimes
 
             else:
-                bookableTimes = list('Fully Booked')
+                bookableTimes = list('Fully Booked')  # if all times are booked it will return fully booked.
 
-            print(bookableTimes)
+            session['bookableTimes'] = bookableTimes
             return redirect(url_for("bookLessonTime", username=session["user"], bookableTimes=bookableTimes))
 
         return render_template('bookLesson.html', users=users)
@@ -151,7 +151,7 @@ def bookLesson(username):
     return redirect(url_for("login"))
 
 
-@app.route("/bookLesson_time/<username>/<bookableTimes>/", methods=["GET", "POST"])
+@app.route("/bookLesson_time/<username>/<bookableTimes>/", methods=["GET", "POST"]) # Book Lesson times route
 def bookLessonTime(username, bookableTimes):
 
 
