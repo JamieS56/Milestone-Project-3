@@ -14,14 +14,14 @@
 <form>
     <select class="browser-default" name="bookingTime">
         <option value="" disabled selected>Choose a Time</option>
-        {% for times in bookableTimes %}
-            <option value="{{ times }}">{{ bookableTimes}}</option>
+        {% for times in session.bookableTimes %}
+            <option value="{{ times }}">{{ times }}</option>
         {% endfor %}
     </select>
 
 
 </form>
 
-<span>{{ bookedTimes }}</span>
+
 
 {% endblock %}

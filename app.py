@@ -4,6 +4,7 @@ from flask import (
     redirect, request, session, url_for)
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
+
 from werkzeug.security import generate_password_hash, check_password_hash
 if os.path.exists("env.py"):
     import env
@@ -115,47 +116,54 @@ def viewBookings(username):
 @app.route("/bookLesson/<username>", methods=["GET", "POST"])
 def bookLesson(username):
     # this is a list of the bookable times to the user to compare to what is already booked in the database. in the future it will be able to be set by the instructor and fetched from the database.
-    allTimes = ['10:00-11:00', '11:00-12:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00']
+    
     if session["user"]:  # checks if user is logged in
         users = list(mongo.db.users.find())  # Gets list of users to get the driving instructor select input
         if request.method == "POST":
-            booking = {                                                   # The dictionary that will be submitted in the final form to the db
+            booking = {  # The dictionary that will be submitted in the final form to the db
                 'instructor': request.form.get('instructor'),
-                'date': request.form.get('date')
-            }
-            # mongo.db.bookings.insert_one(booking)
+                'date': request.form.get('date')}
 
-            bookedTimes = []
+            session['booking'] = booking
 
-            for x in mongo.db.bookings.find(booking, {"_id": 0, 'timeSlot': 1}):
-                x = str(x)
-                x = x.strip("{}''timeSlot: ")
-                x.split(',')
-                bookedTimes.append(x)   # querying the db and retreiving what times have been booked for the selected instructor on the selected day.
-
-            if len(bookedTimes) < len(allTimes):             # This is removing the booked times from the all times list which will then get sent to Driving lesson times
-                for x in allTimes:
-                    for y in bookedTimes:
-                        if x == y:
-                            allTimes.remove(x)
-
-                bookableTimes = allTimes
-
-            else:
-                bookableTimes = list('Fully Booked')  # if all times are booked it will return fully booked.
-
-            session['bookableTimes'] = bookableTimes
-            return redirect(url_for("bookLessonTime", username=session["user"], bookedTimes=bookedTimes, bookableTimes=bookableTimes))
+            return redirect(url_for('get_bookableTimes'))
 
         return render_template('bookLesson.html', users=users)
 
     return redirect(url_for("login"))
 
 
-@app.route("/bookLesson_time/<username>/<bookedTimes>/<bookableTimes>/", methods=["GET", "POST"])  # Book Lesson times route
-def bookLessonTime(username, bookedTimes, bookableTimes):
+@app.route("/get_bookableTimes")
+def get_bookableTimes():
 
-    return render_template('bookLessonTime.html', username=session["user"], bookedTimes=bookedTimes, bookableTimes=bookableTimes)
+    booking = session.get('booking')
+    allTimes = ['10:00-11:00', '11:00-12:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00']
+    bookedTimes = []
+
+    for x in mongo.db.bookings.find(booking, {"_id": 0, 'timeSlot': 1}):
+        
+
+        bookedTimes.append(x['timeSlot'])   # querying the db and retreiving what times have been booked for the selected instructor on the selected day.
+
+    if len(bookedTimes) < len(allTimes):  # This is removing the booked times from the all times list which will then get sent to Driving lesson times
+        for x in allTimes:
+            for y in bookedTimes:
+                if x == y:
+                    allTimes.remove(x)
+
+        bookableTimes = allTimes
+
+    else:
+        bookableTimes = list('Fully Booked')    # if all times are booked it will return fully booked.
+
+    session['bookableTimes'] = bookableTimes
+    return render_template('bookLessonTime.html')
+
+
+# @app.route("/bookLesson_time/", methods=["GET", "POST"])  # Book Lesson times route
+# def bookLessonTime():
+
+    
 
 
 @app.route("/bookingCalender/<username>", methods=["GET", "POST"])
