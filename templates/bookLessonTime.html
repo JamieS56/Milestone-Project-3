@@ -11,14 +11,25 @@
     </div>
 </nav>
 
-<form>
+<form class="col s12" method="POST" action="{{ url_for('bookLessonTime') }}">
     <select class="browser-default" name="bookingTime">
         <option value="" disabled selected>Choose a Time</option>
-        {% for times in session.bookableTimes %}
-            <option value="{{ times }}">{{ times }}</option>
-        {% endfor %}
+        {% if session.bookableTimes == 'Fully Booked' %}
+          <option disabled>Fully Booked</option>
+        {% else %}
+          {% for times in session.bookableTimes %}
+              <option value="{{ times }}">{{ times }}</option>
+          {% endfor %}
+        {% endif %}
     </select>
-
+    
+    {% if session.bookableTimes != 'Fully Booked' %}
+      <button type="submit" class="col s12 btn-large light-blue darken-4 text-shadow" required>
+        Book
+      </button>
+    {% else %}
+      <a href="{{ url_for('bookLesson', username=session['user']) }}" class="waves-effect waves-light btn-large">Return</a>
+    {% endif %}
 
 </form>
 

@@ -141,8 +141,6 @@ def get_bookableTimes():
     bookedTimes = []
 
     for x in mongo.db.bookings.find(booking, {"_id": 0, 'timeSlot': 1}):
-        
-
         bookedTimes.append(x['timeSlot'])   # querying the db and retreiving what times have been booked for the selected instructor on the selected day.
 
     if len(bookedTimes) < len(allTimes):  # This is removing the booked times from the all times list which will then get sent to Driving lesson times
@@ -154,16 +152,27 @@ def get_bookableTimes():
         bookableTimes = allTimes
 
     else:
-        bookableTimes = list('Fully Booked')    # if all times are booked it will return fully booked.
+        bookableTimes = 'Fully Booked'    # if all times are booked it will return fully booked.
 
     session['bookableTimes'] = bookableTimes
+    return redirect(url_for('bookLessonTime'))
+
+
+@app.route("/bookLesson_time/", methods=["GET", "POST"])  # Book Lesson times route
+def bookLessonTime():
+
+    if request.method == "POST":
+        booking = {
+            'instructor': session['booking']['instructor'],
+            'student': session['user'],
+            'date': session['booking']['date'],
+            'timeSlot': request.form.get('bookingTime')
+        }
+        mongo.db.bookings.insert_one(booking)
+        flash('Booking Succesfull')
+        return redirect(url_for('home'))
+
     return render_template('bookLessonTime.html')
-
-
-# @app.route("/bookLesson_time/", methods=["GET", "POST"])  # Book Lesson times route
-# def bookLessonTime():
-
-    
 
 
 @app.route("/bookingCalender/<username>", methods=["GET", "POST"])
@@ -198,8 +207,11 @@ def search():
 @app.route("/edit_user/<user_id>", methods=["GET", "POST"])
 def edit_user(user_id):
     if request.method == "POST":
+        current_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})
         submit = {
             "username": request.form.get("username").lower(),
+            'password': current_user['password'],
             "firstName": request.form.get("first_name"),
             "lastName": request.form.get("last_name"),
             "phoneNumber": request.form.get("phone-number"),

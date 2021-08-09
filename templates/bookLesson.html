@@ -16,7 +16,7 @@
     <form class="col s12" method="POST" action="{{ url_for('bookLesson', username=session['user']) }}">
         <div class="col m6">
             <div class="row">
-                <select class="browser-default" name="instructor">
+                <select class="browser-default" name="instructor" required>
                     <option value="" disabled selected>Choose instructor</option>
                     {% for user in users %}
                     {% if user.accountType == 'instructor' %}
@@ -27,13 +27,13 @@
             </div>
             <label>choose a day</label>
             <div id='date-picker-div' class="row">
-                <input id="lesson-booking-date-picker" name='date' type="text" class="datepicker">
+                <input id="lesson-booking-date-picker" name='date' type="text" class="datepicker" required>
             </div>
 
         </div>
 
         <button type="submit" class="col s12 btn-large light-blue darken-4 text-shadow" required>
-            Submit
+            Next
         </button>
 
     </form>
