@@ -2,9 +2,32 @@
 {% block content %}
 <h1>Booking Calender</h1>    
 
-<div>
-    a calender which shows all booked dates for specific instructor logged in and details about user who has booked those lessons. And the ability to edit the lessons.
-</div>
-
+{% if session.bookedLessons|length > 0 %}
+    <ul class="collapsible">
+        {% for lessons in session.bookedLessons %}
+        <li>
+            <div class="collapsible-header white-text light-blue darken-4 text-shadow row">
+                <div class="col s1">
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                <div class="col s9">
+                    <strong>{{ lessons.student }}</strong> : {{ lessons.date }}
+                </div>
+                <div class="col s4 right-align">
+                    <a href="" class="btn-small green accent-4">Cancel</a>
+                </div>
+            </div>
+            <div class="collapsible-body">
+                <strong>{{ lessons.student }}</strong>
+                <p>{{ lessons.date }}</p>
+                <p>{{ lessons.timeSlot }}</p>
+                <p>{{ lessons.instructor }}</p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+<h3 class="red-text text-darken-4 center-align">No Results Found</h3>
+{% endif %}
 
 {% endblock %}

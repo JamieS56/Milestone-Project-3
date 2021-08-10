@@ -178,9 +178,21 @@ def bookLessonTime():
 
 @app.route("/bookingCalender/<username>", methods=["GET", "POST"])
 def bookingCalender(username):
+    username = session["user"]
+    if session["user"]:
+
+        if session['accountType'] == 'admin':
+            session['bookedLessons'] = list(mongo.db.bookings.find({},{'_id': 0}))
+
+        else:
+            session['bookedLessons'] = list(mongo.db.bookings.find({'instructor': session["user"]},{'_id': 0}))
+
+        return render_template("bookingCalender.html", username=username)
+
+    return redirect(url_for("login"))
 
 
-    return render_template("bookingCalender.html", username=username)
+
 
 
 @app.route("/userManager", methods=["GET", "POST"])

@@ -97,6 +97,17 @@ The goal of DLB is to make the act of booking a driving lesson as quick and simp
 
     Again on the callender booking page there will be an edit or delete button for the instructor to  change or delete there bookings if there is any need to 
 
+
+### Instructor Goals Testing:
+
+1. "I want to be able to easily book a lesson."
+
+    As soon as you make an account it takes you to the home screen which propmts you to book a lesson also it is the second tab in the side bar after home encouraging the useer to book a lesson. once they click on it the user ony has to input 3 fields: driving instructor, date, time and an optional 4th of any other information the instructor may need like a pickup location.
+
+2. "I want to be able to see what lessons I have booked."
+
+    The "My Bookings" page clearly shows all bookings and information about the booking to the user.
+
 ### Other teting: 
 * Testing sidenav
 The sidenav that is used so mobile users can access the menu wasn't working. This was because jquery wasn't connected so addded it to the base html and works now.
