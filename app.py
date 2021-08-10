@@ -108,6 +108,8 @@ def viewBookings(username):
     username = session["user"]
 
     if session["user"]:
+        session['bookedLessons'] = list(mongo.db.bookings.find({'student': session["user"]},{'_id': 0}))
+
         return render_template("viewBookings.html", username=username)
 
     return redirect(url_for("login"))
@@ -116,7 +118,6 @@ def viewBookings(username):
 @app.route("/bookLesson/<username>", methods=["GET", "POST"])
 def bookLesson(username):
     # this is a list of the bookable times to the user to compare to what is already booked in the database. in the future it will be able to be set by the instructor and fetched from the database.
-    
     if session["user"]:  # checks if user is logged in
         users = list(mongo.db.users.find())  # Gets list of users to get the driving instructor select input
         if request.method == "POST":
@@ -177,12 +178,9 @@ def bookLessonTime():
 
 @app.route("/bookingCalender/<username>", methods=["GET", "POST"])
 def bookingCalender(username):
-    username = session["user"]
 
-    if session["user"]:
-        return render_template("bookingCalender.html", username=username)
 
-    return redirect(url_for("login"))
+    return render_template("bookingCalender.html", username=username)
 
 
 @app.route("/userManager", methods=["GET", "POST"])

@@ -3,8 +3,30 @@
 
 <h1>Your Bookings</h1>
 
-<div>
-    list of cards of users booked lessons.
-</div>
+
+{% if session.bookedLessons|length > 0 %}
+    <ul class="collapsible">
+        {% for lessons in session.bookedLessons %}
+        <li>
+            <div class="collapsible-header white-text light-blue darken-4 text-shadow">
+                <div class="col s3">
+                    <i class="fas fa-caret-down"></i>
+                    <a href="" class="btn-small green accent-4">Cancel</a>
+                </div>
+                <div class="col s9">
+                    <strong>{{ lessons.instructor }}</strong> : {{ lessons.date }}
+                </div>
+            </div>
+            <div class="collapsible-body">
+                <strong>{{ lessons.instructor }}</strong>
+                <p>{{ lessons.date }}</p>
+                <p>{{ lessons.timeSlot }}</p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+<h3 class="red-text text-darken-4 center-align">No Results Found</h3>
+{% endif %}
 
 {% endblock %}
