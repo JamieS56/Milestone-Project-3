@@ -4,16 +4,36 @@ footer i{
     padding:0;
 
 }
+h1, h2, h3, h4, h5{
+  font-family: 'Ubuntu', sans-serif;
+}
+
 body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    font-family: 'Roboto', sans-serif;
   }
 
-  main {
+main {
     flex: 1 0 auto;
   }
-  .nav-wrapper{
-    @extend .transparent, .black-text
+#nav-logo{
+  height:50px;
+  width:50px;
+  padding:5px;
+}
+#hero-image{
+  width:90%;
+  padding:10px;
 
-  }
+}
+#hero-image-container{
+  height:100%;
+}
+#home-page-text{
+  border: 1px black solid;
+  padding: 6px;
+  border-radius: 10px;
+  margin:10px;
+}
