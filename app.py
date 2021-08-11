@@ -1,7 +1,7 @@
 import os
 from flask import (
     Flask, flash, render_template,
-    redirect, request, session, url_for)
+    redirect, jsonify, request, session, url_for)
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
@@ -17,8 +17,17 @@ app.secret_key = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
 
+ALL_SLOTS = ['10:00-11:00', '11:00-12:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00']
+
+
+def is_user_logged_in():
+    if session["user"]:
+        return True
+    return False
 
 @app.route("/")
+
+
 @app.route("/home")
 def home():
     return render_template('home.html')
@@ -26,9 +35,11 @@ def home():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    # If logged in, redirect to home
+    if is_user_logged_in():
+        return redirect(url_for("home"))
 
     if request.method == "POST":
-
         # check if username already exists in db
         existing_user = mongo.db.users.find_one(
             {"username": request.form.get("username").lower()})
@@ -47,25 +58,30 @@ def register():
         register = {
             "username": request.form.get("username").lower(),
             "password": generate_password_hash(request.form.get("password")),
-            "firstName": request.form.get("first_name"),
-            "lastName": request.form.get("last_name"),
-            "phoneNumber": request.form.get("phone-number"),
+            "first_name": request.form.get("first_name"),
+            "last_name": request.form.get("last_name"),
+            "phone_number": request.form.get("phone-number"),
             "email": request.form.get("email"),
-            "accountType": "customer",
+            "account_type": "customer",
         }
+
         mongo.db.users.insert_one(register)
 
         # put the new user into 'session' cookie
         session["user"] = request.form.get("username")
-        session["accountType"] = request.form.get("accountType")
+        session["account_type"] = request.form.get("account_type")
         flash("Registration Successful!")
-        return redirect(url_for("viewBookings", username=session["user"]))
+        return redirect(url_for("view_bookings", username=session["user"]))
 
     return render_template("register.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    # If logged in, redirect to home
+    if is_user_logged_in():
+      return redirect(url_for("home"))
+
     if request.method == "POST":
         # check if username exists in db
         existing_user = mongo.db.users.find_one(
@@ -75,11 +91,9 @@ def login():
             # ensure hashed password matches user input
             if check_password_hash(existing_user["password"], request.form.get("password")):
                 session["user"] = request.form.get("username").lower()
-                session["accountType"] = mongo.db.users.find_one({'username': session["user"]})['accountType']
+                session["account_type"] = mongo.db.users.find_one({'username': session["user"]})['account_type']
                 flash("Welcome, {}".format(request.form.get("username")))
-                print(session['accountType'])
-                print(session['user'])
-                return redirect(url_for("viewBookings", username=session["user"]))
+                return redirect(url_for("view_bookings", username=session["user"]))
 
             else:
                 # invalid password match
@@ -99,64 +113,63 @@ def logout():
     # remove user from session cookie
     flash("You have been logged out")
     session.pop("user")
-    session.pop("accountType")
+    session.pop("account_type")
     return redirect(url_for("login"))
 
 
-@app.route("/view-bookings/<username>", methods=["GET", "POST"])
-def viewBookings(username):
+@app.route("/bookings")
+def view_bookings():
+    if not is_user_logged_in():
+        return redirect(url_for("login"))
+
     username = session["user"]
+    bookings = list(mongo.db.bookings.find({'student': username},{'_id': 0}))
 
-    if session["user"]:
-        session['bookedLessons'] = list(mongo.db.bookings.find({'student': session["user"]},{'_id': 0}))
+    return render_template("view_bookings.html", username=username, bookings=bookings)
 
-        return render_template("viewBookings.html", username=username)
-
-    return redirect(url_for("login"))
-
-
-@app.route("/bookLesson/<username>", methods=["GET", "POST"])
-def bookLesson(username):
+@app.route("/booking/create", methods=["GET", "POST"])
+def book_lesson():
     # this is a list of the bookable times to the user to compare to what is already booked in the database. in the future it will be able to be set by the instructor and fetched from the database.
-    if session["user"]:  # checks if user is logged in
-        users = list(mongo.db.users.find())  # Gets list of users to get the driving instructor select input
-        if request.method == "POST":
-            booking = {  # The dictionary that will be submitted in the final form to the db
-                'instructor': request.form.get('instructor'),
-                'date': request.form.get('date')}
+    if not is_user_logged_in():
+        return redirect(url_for("login"))
+         # checks if user is logged in
+    instructors = list(mongo.db.users.find({ "account_type": "instructor"}))  # Gets list of users to get the driving instructor select input
+    if request.method == "POST":
+        booking = {
+            'instructor': session['booking']['instructor'],
+            'student': session['user'],
+            'date': session['booking']['date'],
+            'timeSlot': request.form.get('bookingTime')
+          }
+        mongo.db.bookings.insert_one(booking)
+        flash('Booking Succesfull')
+    return render_template('bookLesson.html', instructors=instructors)
 
-            session['booking'] = booking
-
-            return redirect(url_for('get_bookableTimes'))
-
-        return render_template('bookLesson.html', users=users)
-
-    return redirect(url_for("login"))
 
 
-@app.route("/get_bookableTimes")
-def get_bookableTimes():
+@app.route("/get_available_slots")
+def get_available_slots():
+    booking = {
+      'date': request.args.get("date", ""),
+      "instructor": request.args.get("instructor", "")
+    }
 
-    booking = session.get('booking')
-    allTimes = ['10:00-11:00', '11:00-12:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00']
-    bookedTimes = []
+    booked_slots = []
+    available_slots = ALL_SLOTS
 
-    for x in mongo.db.bookings.find(booking, {"_id": 0, 'timeSlot': 1}):
-        bookedTimes.append(x['timeSlot'])   # querying the db and retreiving what times have been booked for the selected instructor on the selected day.
+    existing_bookings = mongo.db.bookings.find(booking, {"_id": 0, 'timeSlot': 1})
+    for existing_booking in existing_bookings:
+        booked_slots.append(existing_booking['timeSlot'])   # querying the db and retreiving what times have been booked for the selected instructor on the selected day.
 
-    if len(bookedTimes) < len(allTimes):  # This is removing the booked times from the all times list which will then get sent to Driving lesson times
-        for x in allTimes:
-            for y in bookedTimes:
-                if x == y:
-                    allTimes.remove(x)
 
-        bookableTimes = allTimes
+    if len(booked_slots) < len(available_slots):  # This is removing the booked times from the all times list which will then get sent to Driving lesson times
+        available_slots = available_slots - booked_slots
+
+        available_slots = [item for item in available_slots if item not in booked_slots]
 
     else:
-        bookableTimes = 'Fully Booked'    # if all times are booked it will return fully booked.
-
-    session['bookableTimes'] = bookableTimes
-    return redirect(url_for('bookLessonTime'))
+        flash('Fully Booked')    # if all times are booked it will return fully booked.
+    return jsonify({"slots": available_slots})
 
 
 @app.route("/bookLesson_time/", methods=["GET", "POST"])  # Book Lesson times route
@@ -176,32 +189,30 @@ def bookLessonTime():
     return render_template('bookLessonTime.html')
 
 
-@app.route("/bookingCalender/<username>", methods=["GET", "POST"])
-def bookingCalender(username):
+@app.route("/booking/calender", methods=["GET", "POST"])
+def booking_calender():
+    if not is_user_logged_in():
+        return redirect(url_for("login"))
+
     username = session["user"]
-    if session["user"]:
+    user_account_type = mongo.db.users.find_one({"username": username})["account_type"]
+    bookings = []
+    if user_account_type == 'admin':
+        bookings = list(mongo.db.bookings.find({},{'_id': 0}))
 
-        if session['accountType'] == 'admin':
-            session['bookedLessons'] = list(mongo.db.bookings.find({},{'_id': 0}))
+    else:
+        bookings = list(mongo.db.bookings.find({'instructor': username},{'_id': 0}))
 
-        else:
-            session['bookedLessons'] = list(mongo.db.bookings.find({'instructor': session["user"]},{'_id': 0}))
-
-        return render_template("bookingCalender.html", username=username)
-
-    return redirect(url_for("login"))
+    return render_template("bookingCalender.html", username=username, bookings=bookings)
 
 
-
-
-
-@app.route("/userManager", methods=["GET", "POST"])
-def userManager():
+@app.route("/users/manage", methods=["GET", "POST"])
+def user_manager():
     users = list(mongo.db.users.find())
     return render_template("userManager.html", users=users)
 
 
-@app.route("/get_users")
+@app.route("/users")
 def get_users():
     users = list(mongo.db.users.find().sort("username", 1))
     return render_template("userManager.html", users=users)
@@ -214,7 +225,7 @@ def search():
     return render_template("userManager.html", users=users)
 
 
-@app.route("/edit_user/<user_id>", methods=["GET", "POST"])
+@app.route("/user/<user_id>/edit", methods=["GET", "POST"])
 def edit_user(user_id):
     if request.method == "POST":
         current_user = mongo.db.users.find_one(
@@ -222,11 +233,11 @@ def edit_user(user_id):
         submit = {
             "username": request.form.get("username").lower(),
             'password': current_user['password'],
-            "firstName": request.form.get("first_name"),
-            "lastName": request.form.get("last_name"),
-            "phoneNumber": request.form.get("phone-number"),
+            "first_name": request.form.get("first_name"),
+            "last_name": request.form.get("last_name"),
+            "phone_number": request.form.get("phone-number"),
             "email": request.form.get("email"),
-            "accountType": request.form.get("accountType"),
+            "account_type": request.form.get("account_type"),
         }
         mongo.db.users.update({"_id": ObjectId(user_id)}, submit)
         flash("User profile Successfully Updated")

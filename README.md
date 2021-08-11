@@ -115,3 +115,11 @@ The sidenav that is used so mobile users can access the menu wasn't working. Thi
 ## Deployment
 ### Notes 
 For the first couple of weeks of my project i din't realise I was pushong straight to heroku and not to github, which i realised when the gitpod workspaces went down and i lost the work on the workspace and it wasnt on github but was on heroku. so i cloned the heroku repository into a new workspace for my project using 'heroku git:clone -a APP-NAME' and reinstalled the packages that i needed and remade my env file.
+
+
+
+Photos links.
+
+https://www.unionschoolofmotoring.co.uk/wp-content/uploads/2020/10/prices-car.png.webp
+
+https://blog.passmefast.co.uk/images/l-plate-300x300.png

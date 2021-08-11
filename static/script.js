@@ -25,4 +25,12 @@ $(document).ready(function () {
         $('select').removeAttr('disabled')
     })
 
+    $('#date-picker-btn').click(async function getAvailableSlots(dateForBooking, instructor) {
+        return await fetch(`/get_available_slots?date=${dateForBooking}&instructor=${instructor}`);
+        
+        })
+
+    // Stepper js taken from
+
+    
 })
