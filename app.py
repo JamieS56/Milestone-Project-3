@@ -121,7 +121,6 @@ def logout():
     # remove user from session cookie
     flash("You have been logged out")
     session.pop("user")
-    session.pop("account_type")
     return redirect(url_for("login"))
 
 
@@ -132,12 +131,13 @@ def book_lesson():
         return redirect(url_for("login"))
          # checks if user is logged in
     instructors = list(mongo.db.users.find({"account_type": "instructor"}))  # Gets list of users to get the driving instructor select input
+    
     if request.method == "POST":
         booking = {
             'instructor': session['booking']['instructor'],
             'student': session['user'],
             'date': session['booking']['date'],
-            'timeSlot': request.form.get('bookingTime')
+            'time_slot': request.form.get('bookingTime')
           }
         mongo.db.bookings.insert_one(booking)
         flash('Booking Succesfull')
@@ -154,35 +154,18 @@ def get_available_slots():
     booked_slots = []
     available_slots = ALL_SLOTS
 
-    existing_bookings = mongo.db.bookings.find(booking, {"_id": 0, 'timeSlot': 1})
+    existing_bookings = mongo.db.bookings.find(booking, {"_id": 0, 'time_slot': 1})
     for existing_booking in existing_bookings:
-        booked_slots.append(existing_booking['timeSlot'])   # querying the db and retreiving what times have been booked for the selected instructor on the selected day.
+        booked_slots.append(existing_booking['time_slot'])   # querying the db and retreiving what times have been booked for the selected instructor on the selected day.
 
     if len(booked_slots) < len(available_slots):  # This is removing the booked times from the all times list which will then get sent to Driving lesson times
-        available_slots = available_slots - booked_slots
+        #available_slots = available_slots - booked_slots
 
         available_slots = [item for item in available_slots if item not in booked_slots]
 
     else:
         flash('Fully Booked')    # if all times are booked it will return fully booked.
     return jsonify({"slots": available_slots})
-
-
-@app.route("/bookLesson_time/", methods=["GET", "POST"])  # Book Lesson times route
-def bookLessonTime():
-
-    if request.method == "POST":
-        booking = {
-            'instructor': session['booking']['instructor'],
-            'student': session['user'],
-            'date': session['booking']['date'],
-            'timeSlot': request.form.get('bookingTime')
-        }
-        mongo.db.bookings.insert_one(booking)
-        flash('Booking Succesfull')
-        return redirect(url_for('home'))
-
-    return render_template('bookLessonTime.html', account_type=get_user_account_type())
 
 
 @app.route("/bookings")

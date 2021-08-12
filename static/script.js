@@ -6,7 +6,7 @@ $(document).ready(function () {
     $(".tooltipped").tooltip();
     $("select").formSelect();
     $(".datepicker").datepicker({
-        format: "dd, mm, yyyy",
+        format: "dd/mm/yyyy",
         yearRange: 3,
         showClearBtn: true,
         i18n: {
@@ -24,9 +24,11 @@ $(document).ready(function () {
         $('.input-field').children(':disabled').removeAttr('disabled')
         $('select').removeAttr('disabled')
     })
+    
 
-    $('#date-picker-btn').click(async function getAvailableSlots(dateForBooking, instructor) {
-        return await fetch(`/get_available_slots?date=${dateForBooking}&instructor=${instructor}`);
+    $('#time-selector').focus(async function getAvailableSlots( _eventdata, instructor = $("#instructor-selector").val(), date = $('#lesson-booking-date-picker').val()) {
+        console.log(date)
+        return await fetch(`/get_available_slots?date=${date}&instructor=${instructor}`);
         
         })
 

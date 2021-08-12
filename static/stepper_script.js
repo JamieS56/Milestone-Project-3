@@ -4,20 +4,24 @@ $(document).ready(function() {
   
   function validateStepOne() {
     // Extract the checked checkboxes from the first step
-    if($('#instructor-selector option:selected') === '')
-      return true;
-    return false;
+    if($('#instructor-selector option:selected').val() == '')
+      return false;
+    return true;
   }
   
+  function validateStepTwo() {
+   // Extract the checked checkboxes from the first step
+   if($('#lesson-booking-date-picker').val() == '')
+     return false;
+   return true;
+ }
+
   function validateStepThree() {
-    var validation = true;
-    if($('.step:nth-child(3) input[type="text"]').val().indexOf('materialize') === -1)
-      validation = false;
-    if($('.step:nth-child(3) input[type="checkbox"]:checked').length === 0)
-      validation = false;
-    return validation;
-    
+   if($('#time-selector option:selected').val() == '')
+      return false;
+    return true;
   }
+  
   
   function nextStepThreeHandler() {
     if(validateStepThree())
