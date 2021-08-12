@@ -21,16 +21,25 @@ ALL_SLOTS = ['10:00-11:00', '11:00-12:00', '13:00-14:00', '14:00-15:00', '15:00-
 
 
 def is_user_logged_in():
-    if session["user"]:
+    if session.get("user"):
         return True
     return False
 
+
+def get_user_account_type():
+    account_type = mongo.db.users.find_one({'username': session["user"]})['account_type']
+    return account_type
+
+
+def get_users():
+    users = list(mongo.db.users.find().sort("username", 1))
+    return users
+
+
 @app.route("/")
-
-
 @app.route("/home")
 def home():
-    return render_template('home.html')
+    return render_template('home.html', account_type=get_user_account_type())
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -80,7 +89,7 @@ def register():
 def login():
     # If logged in, redirect to home
     if is_user_logged_in():
-      return redirect(url_for("home"))
+        return redirect(url_for("home"))
 
     if request.method == "POST":
         # check if username exists in db
@@ -91,9 +100,8 @@ def login():
             # ensure hashed password matches user input
             if check_password_hash(existing_user["password"], request.form.get("password")):
                 session["user"] = request.form.get("username").lower()
-                session["account_type"] = mongo.db.users.find_one({'username': session["user"]})['account_type']
                 flash("Welcome, {}".format(request.form.get("username")))
-                return redirect(url_for("view_bookings", username=session["user"]))
+                return redirect(url_for("home", username=session["user"], account_type=get_user_account_type()))
 
             else:
                 # invalid password match
@@ -117,23 +125,13 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route("/bookings")
-def view_bookings():
-    if not is_user_logged_in():
-        return redirect(url_for("login"))
-
-    username = session["user"]
-    bookings = list(mongo.db.bookings.find({'student': username},{'_id': 0}))
-
-    return render_template("view_bookings.html", username=username, bookings=bookings)
-
 @app.route("/booking/create", methods=["GET", "POST"])
 def book_lesson():
     # this is a list of the bookable times to the user to compare to what is already booked in the database. in the future it will be able to be set by the instructor and fetched from the database.
     if not is_user_logged_in():
         return redirect(url_for("login"))
          # checks if user is logged in
-    instructors = list(mongo.db.users.find({ "account_type": "instructor"}))  # Gets list of users to get the driving instructor select input
+    instructors = list(mongo.db.users.find({"account_type": "instructor"}))  # Gets list of users to get the driving instructor select input
     if request.method == "POST":
         booking = {
             'instructor': session['booking']['instructor'],
@@ -143,8 +141,7 @@ def book_lesson():
           }
         mongo.db.bookings.insert_one(booking)
         flash('Booking Succesfull')
-    return render_template('bookLesson.html', instructors=instructors)
-
+    return render_template('bookLesson.html', instructors=instructors, account_type=get_user_account_type())
 
 
 @app.route("/get_available_slots")
@@ -160,7 +157,6 @@ def get_available_slots():
     existing_bookings = mongo.db.bookings.find(booking, {"_id": 0, 'timeSlot': 1})
     for existing_booking in existing_bookings:
         booked_slots.append(existing_booking['timeSlot'])   # querying the db and retreiving what times have been booked for the selected instructor on the selected day.
-
 
     if len(booked_slots) < len(available_slots):  # This is removing the booked times from the all times list which will then get sent to Driving lesson times
         available_slots = available_slots - booked_slots
@@ -186,7 +182,18 @@ def bookLessonTime():
         flash('Booking Succesfull')
         return redirect(url_for('home'))
 
-    return render_template('bookLessonTime.html')
+    return render_template('bookLessonTime.html', account_type=get_user_account_type())
+
+
+@app.route("/bookings")
+def view_bookings():
+    if not is_user_logged_in():
+        return redirect(url_for("login"))
+
+    username = session["user"]
+    bookings = list(mongo.db.bookings.find({'student': username},{'_id': 0}))
+
+    return render_template("view_bookings.html", username=username, bookings=bookings, account_type=get_user_account_type())
 
 
 @app.route("/booking/calender", methods=["GET", "POST"])
@@ -198,31 +205,25 @@ def booking_calender():
     user_account_type = mongo.db.users.find_one({"username": username})["account_type"]
     bookings = []
     if user_account_type == 'admin':
-        bookings = list(mongo.db.bookings.find({},{'_id': 0}))
+        bookings = list(mongo.db.bookings.find({}, {'_id': 0}))
 
     else:
         bookings = list(mongo.db.bookings.find({'instructor': username},{'_id': 0}))
 
-    return render_template("bookingCalender.html", username=username, bookings=bookings)
+    return render_template("bookingCalender.html", username=username, bookings=bookings, account_type=get_user_account_type())
 
 
 @app.route("/users/manage", methods=["GET", "POST"])
 def user_manager():
-    users = list(mongo.db.users.find())
-    return render_template("userManager.html", users=users)
-
-
-@app.route("/users")
-def get_users():
-    users = list(mongo.db.users.find().sort("username", 1))
-    return render_template("userManager.html", users=users)
+    users = get_users()
+    return render_template("userManager.html", users=users, account_type=get_user_account_type())
 
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
     query = request.form.get("query")
     users = list(mongo.db.users.find({"$text": {"$search": query}}))
-    return render_template("userManager.html", users=users)
+    return render_template("userManager.html", users=users, account_type=get_user_account_type())
 
 
 @app.route("/user/<user_id>/edit", methods=["GET", "POST"])
@@ -244,7 +245,7 @@ def edit_user(user_id):
         return redirect(url_for("userManager"))
 
     users = list(mongo.db.users.find().sort("username", 1))
-    return render_template("userManager.html", users=users)
+    return render_template("userManager.html", users=users, account_type=get_user_account_type())
 
 
 if __name__ == "__main__":

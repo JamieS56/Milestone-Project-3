@@ -46,10 +46,10 @@
                     {% if session.user %}
                     <li><a href="{{ url_for('book_lesson') }}">Book a Lesson</a></li>
                     <li><a href="{{ url_for('view_bookings') }}">My Bookings</a></li>
-                    {% if session.accountType == "instructor"%}
+                    {% if account_type == "instructor"%}
                     <li><a href="{{ url_for('booking_calender') }}">Booking Callender</a></li>
                     {% endif %}
-                    {% if session.accountType == "admin" %}
+                    {% if account_type == "admin" %}
                     <li><a href="{{ url_for('booking_calender') }}">Booking Calender</a></li>
                     <li><a href="{{ url_for('user_manager') }}">User Manager</a></li>
                     {% endif %}
@@ -72,10 +72,10 @@
             {% if session.user %}
             <li><a href="{{ url_for('book_lesson') }}">Book a Lesson</a></li>
             <li><a href="{{ url_for('view_bookings') }}">My Bookings</a></li>
-            {% if session.accountType == "instructor"%}
+            {% if account_type == "instructor"%}
             <li><a href="{{ url_for('booking_calender') }}">Booking Callender</a></li>
             {% endif %}
-            {% if session.accountType == "admin" %}
+            {% if account_type == "admin" %}
             <li><a href="{{ url_for('booking_calender') }}">Booking Calender</a></li>
             <li><a href="{{ url_for('user_manager') }}">User Manager</a></li>
             {% endif %}

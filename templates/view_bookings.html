@@ -4,9 +4,9 @@
 <h1>Your Bookings</h1>
 
 
-{% if session.bookedLessons|length > 0 %}
+{% if bookings|length > 0 %}
     <ul class="collapsible">
-        {% for lessons in session.bookedLessons %}
+        {% for booking in bookings %}
         <li>
             <div class="collapsible-header white-text red darken-3 text-shadow row">
                 <div class="col s1">
@@ -14,7 +14,7 @@
                     
                 </div>
                 <div class="col s9">
-                    <strong>{{ lessons.instructor }}</strong> : {{ lessons.date }}
+                    <strong>{{ booking.instructor }}</strong> : {{ booking.date }}
                     
                 </div>
                 <div class="col s4 right">
@@ -22,9 +22,9 @@
                 </div>
             </div>
             <div class="collapsible-body">
-                <strong>{{ lessons.instructor }}</strong>
-                <p>{{ lessons.date }}</p>
-                <p>{{ lessons.timeSlot }}</p>
+                <strong>{{ booking.instructor }}</strong>
+                <p>{{ booking.date }}</p>
+                <p>{{ booking.timeSlot }}</p>
 
             </div>
         </li>

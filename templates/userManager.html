@@ -11,7 +11,7 @@
                 <label for="query">Search Users</label>
             </div>
             <div class="col s12 m4">
-                <a href="{{ url_for('get_users') }}" class="red btn text-shadow">Reset</a>
+                <a href="{{ url_for('user_manager') }}" class="red btn text-shadow">Reset</a>
                 <button type="submit" class="light-blue darken-1 btn text-shadow">Search</button>
             </div>
         </div>
@@ -35,19 +35,19 @@
             <form class="col s12 editUserForm" method="POST" action="{{ url_for('edit_user', user_id=user._id) }}">
                 <div class="row">
                     <div class="input-field col s6">
-                        <input value="{{ user.firstName }}" id="first_name" name='first_name' type="text"
+                        <input value="{{ user.first_name }}" id="first_name" name='first_name' type="text"
                             class="validate" disabled="disabled">
                         <label for="first_name">First Name</label>
                     </div>
                     <div class="input-field col s6">
-                        <input value="{{ user.lastName }}" id="last_name" name='last_name' type="text" class="validate"
+                        <input value="{{ user.last_name }}" id="last_name" name='last_name' type="text" class="validate"
                             disabled="disabled">
                         <label for="last_name">Last Name</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input value="{{ user.phoneNumber }}" id="phone-number" name='phone-number' type="text"
+                        <input value="{{ user.phone_number }}" id="phone-number" name='phone-number' type="text"
                             class="validate" disabled>
                         <label for="phone-number">Phone</label>
                     </div>
@@ -67,7 +67,7 @@
                 <div class="col s12">
                     <label>Account Type</label>
                     <select class="browser-default" name="accountType" disabled>
-                        <option value="{{ user.accountType }}" disabled selected>{{ user.accountType }}</option>
+                        <option value="{{ user.account_type }}" disabled selected>{{ user.account_type }}</option>
                         <option value="customer">Customer</option>
                         <option value="instructor">Instructor</option>
                         <option value="admin">Admin</option>

@@ -2,26 +2,26 @@
 {% block content %}
 <h1>Booking Calender</h1>    
 
-{% if session.bookedLessons|length > 0 %}
+{% if bookings|length > 0 %}
     <ul class="collapsible">
-        {% for lessons in session.bookedLessons %}
+        {% for booking in bookings %}
         <li>
             <div class="collapsible-header white-text light-blue darken-4 text-shadow row">
                 <div class="col s1">
                     <i class="fas fa-caret-down"></i>
                 </div>
                 <div class="col s9">
-                    <strong>{{ lessons.student }}</strong> : {{ lessons.date }}
+                    <strong>{{ booking.student }}</strong> : {{ booking.date }}
                 </div>
                 <div class="col s4 right-align">
                     <a href="" class="btn-small green accent-4">Cancel</a>
                 </div>
             </div>
             <div class="collapsible-body">
-                <strong>{{ lessons.student }}</strong>
-                <p>{{ lessons.date }}</p>
-                <p>{{ lessons.timeSlot }}</p>
-                <p>{{ lessons.instructor }}</p>
+                <strong>{{ booking.student }}</strong>
+                <p>{{ booking.date }}</p>
+                <p>{{ booking.timeSlot }}</p>
+                <p>{{ booking.instructor }}</p>
             </div>
         </li>
         {% endfor %}
