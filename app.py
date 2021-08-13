@@ -42,7 +42,8 @@ def get_users():
 def home():
     if is_user_logged_in():
         account_type = get_user_account_type()
-    account_type = NEW_USER_ACCOUNT_TYPE
+    else:
+        account_type = NEW_USER_ACCOUNT_TYPE
     return render_template('home.html', account_type=account_type)
 
 

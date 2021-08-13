@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block header %}
+
 <!-- Materializecss compiled and minified CSS -->
 <link href="https://cdn.jsdelivr.net/npm/materialize-stepper@2.1.4/materialize-stepper.css" rel="stylesheet">
 <!-- jQueryValidation Plugin -->
@@ -9,85 +10,91 @@
 {% endblock %}
 {% block content %}
 
-<h1>Book a Lesson</h1>
+<h1 class="center-align">Book a Lesson</h1>
 
-<form method="POST" action="{{ url_for('book_lesson') }}">
-  <ul class="stepper parallel horizontal">
-    <li class="step active">
-      <div class="step-title waves-effect waves-dark">Instructor</div>
-      <div class="step-content">
-        <div class="row">
-          <div class='form-field col s12'>
-            <h4>Choose an Instructor</h4>
-            <select id="instructor-selector" class="browser-default filled-in required validate" name="instructor"
-              required>
-              <option value="" disabled selected>Choose instructor</option>
-              {% for instructor in instructors %}
-              <option value="{{ instructor.username }}">{{ instructor.first_name }} {{ instructor.last_name }}</option>
-              {% endfor %}
-            </select>
-          </div>
-        </div>
-        <div class="step-actions">
-          <button class="waves-effect waves-dark btn next-step" data-validator="validateStepOne">CONTINUE</button>
-          <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
-        </div>
-      </div>
-    </li>
-    <li class="step">
-      <div class="step-title waves-effect waves-dark">Day</div>
-      <div class="step-content">
-        <div class="row">
-          <div class='form-field col s12'>
-            <h4>Choose a Day</h4>
-            <div class="input-field col s12">
-              <div id='date-picker-div' class="row">
-                <input id="lesson-booking-date-picker" name='date' type="text" class="datepicker required validate"
-                  placeholder="choose a day" required>
-              </div>
+<div class="container">
+
+  <form method="POST" action="{{ url_for('book_lesson') }}">
+    <ul class="stepper parallel horizontal">
+      <li class="step active">
+        <div class="step-title waves-effect waves-dark">Instructor</div>
+        <div class="step-content">
+          <div class="row">
+            <div class='form-field col s12'>
+              <h4 class="center-align">Choose an Instructor</h4>
+              <select id="instructor-selector" class="browser-default filled-in required validate" name="instructor"
+                required>
+                <option value="" disabled selected>Choose instructor</option>
+                {% for instructor in instructors %}
+                <option value="{{ instructor.username }}">{{ instructor.first_name }} {{ instructor.last_name }}
+                </option>
+                {% endfor %}
+              </select>
             </div>
           </div>
-        </div>
-        <div class="step-actions">
-          <button class="waves-effect waves-dark btn next-step refresh-time-slots" data-validator="validateStepTwo">CONTINUE</button>
-          <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
-        </div>
-      </div>
-    </li>
-    <li class="step">
-      <div class="step-title waves-effect waves-dark refresh-time-slots">Time Slot</div>
-      <div class="step-content">
-        <div class="row">
-          <div class='form-field'>
-            <h4>Choose a Time Slot</h4>
-            <select id="time-selector" class="browser-default filled-in required validate" name="time_slot" required>
-            </select>
-          </div>
           <div class="step-actions">
-            <button class="waves-effect waves-dark btn next-step" data-feedback="nextStepThreeHandler"
-              data-validator="validateStepThree">CONTINUE</button>
+            <button class="waves-effect waves-dark btn next-step" data-validator="validateStepOne">CONTINUE</button>
             <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
           </div>
         </div>
-    </li>
-    <li class="step">
-      <div class="step-title waves-effect waves-dark">Book</div>
-      <div class="step-content">
-        <div class="row">
-          <div class='form-field'>
-            <h4>Book</h4>
-            <textarea id="optionalInfo" name="optional_details" class="materialize-textarea" placeholder="Add any optional info you want here..."></textarea>
+      </li>
+      <li class="step">
+        <div class="step-title waves-effect waves-dark">Day</div>
+        <div class="step-content">
+          <div class="row">
+            <div class='form-field col s12'>
+              <h4 class="center-align">Choose a Day</h4>
+              <div class="input-field col s12">
+                <div id='date-picker-div' class="row">
+                  <input id="lesson-booking-date-picker" name='date' type="text" class="datepicker required validate"
+                    placeholder="choose a day" required>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="step-actions">
+            <button class="waves-effect waves-dark btn next-step refresh-time-slots"
+              data-validator="validateStepTwo">CONTINUE</button>
+            <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
           </div>
         </div>
-        <div class="step-actions">
-          <button class="btn waves-effect waves-dark" type="submit" name="action">BOOK
-            <i class="material-icons right">send</i>
-          </button>
-          <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
+      </li>
+      <li class="step">
+        <div class="step-title waves-effect waves-dark refresh-time-slots">Time Slot</div>
+        <div class="step-content">
+          <div class="row">
+            <div class='form-field'>
+              <h4 class="center-align">Choose a Time Slot</h4>
+              <select id="time-selector" class="browser-default filled-in required validate" name="time_slot" required>
+              </select>
+            </div>
+            <div class="step-actions">
+              <button class="waves-effect waves-dark btn next-step" data-feedback="nextStepThreeHandler"
+                data-validator="validateStepThree">CONTINUE</button>
+              <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
+            </div>
+          </div>
+      </li>
+      <li class="step">
+        <div class="step-title waves-effect waves-dark">Book</div>
+        <div class="step-content">
+          <div class="row">
+            <div class='form-field'>
+              <h4 class="center-align">Book</h4>
+              <textarea id="optionalInfo" name="optional_details" class="materialize-textarea"
+                placeholder="Add any optional info you want here..."></textarea>
+            </div>
+          </div>
+          <div class="step-actions">
+            <button class="btn waves-effect waves-dark" type="submit" name="action">BOOK
+              <i class="material-icons right">send</i>
+            </button>
+            <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
+          </div>
         </div>
-      </div>
-    </li>
-  </ul>
-</form>
+      </li>
+    </ul>
+  </form>
+</div>
 
 {% endblock %}
