@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Login</h1>
-
-<div class="row">
-    <form class="col s12"  method="POST" action="{{ url_for('login') }}">
+<h1 class="center-align">Login</h1>
+<div class="container center-align ">
+  <div class="row center-align">
+    <form class="col s12" method="POST" action="{{ url_for('login') }}">
       <div class="row">
         <div class="input-field col s12">
           <input placeholder="Username" id="username" name='username' type="text" class="validate">
@@ -21,6 +21,7 @@
       </button>
     </form>
   </div>
-  
+
   <a href='{{ url_for("register") }}'>Don't have an account? Sign up!</a>
+</div>
 {% endblock %}

@@ -4,7 +4,7 @@ from flask import (
     redirect, jsonify, request, session, url_for)
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
-
+from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
 if os.path.exists("env.py"):
     import env
@@ -19,6 +19,7 @@ mongo = PyMongo(app)
 
 ALL_SLOTS = ['10:00-11:00', '11:00-12:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00']
 NEW_USER_ACCOUNT_TYPE = 'new_user'
+TODAY = date.today()
 
 
 def is_user_logged_in():
@@ -197,7 +198,8 @@ def booking_calender():
         bookings = list(mongo.db.bookings.find({}, {'_id': 0}))
 
     else:
-        bookings = list(mongo.db.bookings.find({'instructor': username},{'_id': 0}))
+        bookings = list(mongo.db.bookings.find({'instructor': username}, {'_id': 0}))
+
 
     return render_template("bookingCalender.html", username=username, bookings=bookings, account_type=get_user_account_type())
 
