@@ -40,7 +40,7 @@ def get_users():
 @app.route("/home")
 def home():
     if is_user_logged_in():
-        account_type=get_user_account_type()
+        account_type = get_user_account_type()
     return render_template('home.html', account_type=account_type)
 
 
