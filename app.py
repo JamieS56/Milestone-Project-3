@@ -18,6 +18,7 @@ app.secret_key = os.environ.get("SECRET_KEY")
 mongo = PyMongo(app)
 
 ALL_SLOTS = ['10:00-11:00', '11:00-12:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00']
+NEW_USER_ACCOUNT_TYPE = 'new_user'
 
 
 def is_user_logged_in():
@@ -41,6 +42,7 @@ def get_users():
 def home():
     if is_user_logged_in():
         account_type = get_user_account_type()
+    account_type = NEW_USER_ACCOUNT_TYPE
     return render_template('home.html', account_type=account_type)
 
 
