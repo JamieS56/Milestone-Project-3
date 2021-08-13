@@ -11,7 +11,7 @@
 
 <h1>Book a Lesson</h1>
 
-<form>
+<form method="POST" action="{{ url_for('book_lesson') }}">
   <ul class="stepper parallel horizontal">
     <li class="step active">
       <div class="step-title waves-effect waves-dark">Instructor</div>
@@ -71,15 +71,18 @@
         </div>
     </li>
     <li class="step">
-      <div class="step-title waves-effect waves-dark">Step 4</div>
+      <div class="step-title waves-effect waves-dark">Book</div>
       <div class="step-content">
         <div class="row">
           <div class='form-field'>
-            <p>Submit phase</p>
+            <h4>Book</h4>
+            <textarea id="optionalInfo" name="optional_details" class="materialize-textarea" placeholder="Add any optional info you want here..."></textarea>
           </div>
         </div>
         <div class="step-actions">
-          <input type="submit" class="waves-effect waves-dark btn next-step" value="SUBMIT" />
+          <button class="btn waves-effect waves-dark" type="submit" name="action">BOOK
+            <i class="material-icons right">send</i>
+          </button>
           <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
         </div>
       </div>

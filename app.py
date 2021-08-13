@@ -134,10 +134,11 @@ def book_lesson():
     
     if request.method == "POST":
         booking = {
-            'instructor': session['booking']['instructor'],
+            'instructor': request.form.get("instructor").lower(),
             'student': session['user'],
-            'date': session['booking']['date'],
-            'time_slot': request.form.get('bookingTime')
+            'date': request.form.get("date"),
+            'time_slot': request.form.get('time_slot'),
+            'optional_details': request.form.get('optional_details')
           }
         mongo.db.bookings.insert_one(booking)
         flash('Booking Succesfull')
