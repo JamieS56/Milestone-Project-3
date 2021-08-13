@@ -1,4 +1,7 @@
 $(document).ready(function () {
+
+    let today = new Date()
+
     $(".sidenav").sidenav({
         edge: "right"
     });
@@ -12,9 +15,8 @@ $(document).ready(function () {
         i18n: {
             done: "Select"
         },
-        onSelect: function (date) {
-            console.log(date.toString())
-        }
+        minDate: today,
+        autoClose: true,
     })
 
 
@@ -24,15 +26,26 @@ $(document).ready(function () {
         $('.input-field').children(':disabled').removeAttr('disabled')
         $('select').removeAttr('disabled')
     })
-    
 
-    $('#time-selector').focus(async function getAvailableSlots( _eventdata, instructor = $("#instructor-selector").val(), date = $('#lesson-booking-date-picker').val()) {
-        console.log(date)
-        return await fetch(`/get_available_slots?date=${date}&instructor=${instructor}`);
-        
+
+    $('.refresh-time-slots').click(getAvailableSlots)
+
+
+    async function getAvailableSlots(_eventdata, instructor = $("#instructor-selector").val(), date = $('#lesson-booking-date-picker').val()) {
+
+        response = await fetch(`/get_available_slots?date=${date}&instructor=${instructor}`)
+        response.json().then(data => {
+            slots = data.slots
+            let timeSlotsHTML = `<option value="" disabled selected>Choose Time Slot</option>`;
+            for (slot in slots) {
+                timeSlotsHTML += `<option value="${slots[slot]}">${slots[slot]}</option>`
+            }
+            console.log(timeSlotsHTML);
+            document.getElementById('time-selector').innerHTML = timeSlotsHTML;
         })
+    }
 
     // Stepper js taken from
 
-    
+
 })

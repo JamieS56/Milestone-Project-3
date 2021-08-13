@@ -159,12 +159,12 @@ def get_available_slots():
         booked_slots.append(existing_booking['time_slot'])   # querying the db and retreiving what times have been booked for the selected instructor on the selected day.
 
     if len(booked_slots) < len(available_slots):  # This is removing the booked times from the all times list which will then get sent to Driving lesson times
-        #available_slots = available_slots - booked_slots
 
         available_slots = [item for item in available_slots if item not in booked_slots]
 
     else:
         flash('Fully Booked')    # if all times are booked it will return fully booked.
+
     return jsonify({"slots": available_slots})
 
 

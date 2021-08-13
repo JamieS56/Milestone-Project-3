@@ -12,80 +12,79 @@
 <h1>Book a Lesson</h1>
 
 <form>
-    <ul class="stepper parallel horizontal">
-      <li class="step active">
-        <div class="step-title waves-effect waves-dark">Instructor</div>
-        <div class="step-content">
-          <div class="row">
-            <div class='form-field col s12'>
-                <h4>Choose an Instructor</h4>
-                <select id="instructor-selector" class="browser-default filled-in required validate" name="instructor" required>
-                    <option value="" disabled selected>Choose instructor</option>
-                    {% for instructor in instructors %}
-                    <option value="{{ instructor.username }}">{{ instructor.first_name }} {{ instructor.last_name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-          </div>
-          <div class="step-actions">
-            <button class="waves-effect waves-dark btn next-step" data-validator="validateStepOne">CONTINUE</button>
-            <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
+  <ul class="stepper parallel horizontal">
+    <li class="step active">
+      <div class="step-title waves-effect waves-dark">Instructor</div>
+      <div class="step-content">
+        <div class="row">
+          <div class='form-field col s12'>
+            <h4>Choose an Instructor</h4>
+            <select id="instructor-selector" class="browser-default filled-in required validate" name="instructor"
+              required>
+              <option value="" disabled selected>Choose instructor</option>
+              {% for instructor in instructors %}
+              <option value="{{ instructor.username }}">{{ instructor.first_name }} {{ instructor.last_name }}</option>
+              {% endfor %}
+            </select>
           </div>
         </div>
-      </li>
-      <li class="step">
-        <div class="step-title waves-effect waves-dark">Day</div>
-        <div class="step-content">
-          <div class="row">
-            <div class='form-field col s12'>
-                <h4>Choose a Day</h4>
-              <div class="input-field col s12">
-                <div id='date-picker-div' class="row">
-                    <input id="lesson-booking-date-picker" name='date' type="text" class="datepicker required validate" placeholder="choose a day"  required>
-                </div>
+        <div class="step-actions">
+          <button class="waves-effect waves-dark btn next-step" data-validator="validateStepOne">CONTINUE</button>
+          <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
+        </div>
+      </div>
+    </li>
+    <li class="step">
+      <div class="step-title waves-effect waves-dark">Day</div>
+      <div class="step-content">
+        <div class="row">
+          <div class='form-field col s12'>
+            <h4>Choose a Day</h4>
+            <div class="input-field col s12">
+              <div id='date-picker-div' class="row">
+                <input id="lesson-booking-date-picker" name='date' type="text" class="datepicker required validate"
+                  placeholder="choose a day" required>
               </div>
             </div>
           </div>
-          <div class="step-actions">
-            <button class="waves-effect waves-dark btn next-step" data-validator="validateStepTwo">CONTINUE</button>
-            <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
-          </div>
         </div>
-      </li>
-      <li class="step">
-        <div class="step-title waves-effect waves-dark">Time Slot</div>
-        <div class="step-content">
-          <div class="row">
-            <div class='form-field'>
-              <h4>Choose a Time Slot</h4>
-              <select id="time-selector" class="browser-default filled-in required validate" name="time_slot" required>
-                <option value="" disabled selected>Choose Time Slot</option>
-                {% for slot in available_slots %}
-                <option value="{{ slot }}">{{ slot }}</option>
-                {% endfor %}
+        <div class="step-actions">
+          <button class="waves-effect waves-dark btn next-step refresh-time-slots" data-validator="validateStepTwo">CONTINUE</button>
+          <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
+        </div>
+      </div>
+    </li>
+    <li class="step">
+      <div class="step-title waves-effect waves-dark refresh-time-slots">Time Slot</div>
+      <div class="step-content">
+        <div class="row">
+          <div class='form-field'>
+            <h4>Choose a Time Slot</h4>
+            <select id="time-selector" class="browser-default filled-in required validate" name="time_slot" required>
             </select>
           </div>
           <div class="step-actions">
-            <button class="waves-effect waves-dark btn next-step" data-feedback="nextStepThreeHandler" data-validator="validateStepThree">CONTINUE</button>
+            <button class="waves-effect waves-dark btn next-step" data-feedback="nextStepThreeHandler"
+              data-validator="validateStepThree">CONTINUE</button>
             <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
           </div>
         </div>
-      </li>
-      <li class="step">
-        <div class="step-title waves-effect waves-dark">Step 4</div>
-        <div class="step-content">
-          <div class="row">
-            <div class='form-field'>
-              <p>Submit phase</p>
-            </div>
-          </div>
-          <div class="step-actions">
-            <input type="submit" class="waves-effect waves-dark btn next-step" value="SUBMIT"/>
-            <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
+    </li>
+    <li class="step">
+      <div class="step-title waves-effect waves-dark">Step 4</div>
+      <div class="step-content">
+        <div class="row">
+          <div class='form-field'>
+            <p>Submit phase</p>
           </div>
         </div>
-      </li>
-    </ul>
-  </form>
+        <div class="step-actions">
+          <input type="submit" class="waves-effect waves-dark btn next-step" value="SUBMIT" />
+          <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
+        </div>
+      </div>
+    </li>
+  </ul>
+</form>
 
 {% endblock %}
