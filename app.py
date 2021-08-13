@@ -39,7 +39,9 @@ def get_users():
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html', account_type=get_user_account_type())
+    if is_user_logged_in():
+        account_type=get_user_account_type()
+    return render_template('home.html', account_type=account_type)
 
 
 @app.route("/register", methods=["GET", "POST"])
