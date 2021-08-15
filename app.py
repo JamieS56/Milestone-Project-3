@@ -180,7 +180,11 @@ def view_bookings():
         return redirect(url_for("login"))
 
     username = session["user"]
-    bookings = list(mongo.db.bookings.find({'student': username},{'_id': 0}))
+    bookings = list(mongo.db.bookings.find({'student': username}))
+    for booking in bookings:  # Changes the instructors username to there actual name when users view there booked lessons.
+        instructor = mongo.db.users.find_one({'username': booking["instructor"]}, {'first_name': 1, 'last_name': 1})
+        instructor_name = instructor['first_name'] + ' ' + instructor['last_name']
+        booking['instructor'] = instructor_name
 
     return render_template("view_bookings.html", username=username, bookings=bookings, account_type=get_user_account_type())
 
@@ -194,12 +198,24 @@ def booking_calender():
     user_account_type = mongo.db.users.find_one({"username": username})["account_type"]
     bookings = []
     if user_account_type == 'admin':
-        bookings = list(mongo.db.bookings.find({}, {'_id': 0}))
+        bookings = list(mongo.db.bookings.find())
 
     else:
-        bookings = list(mongo.db.bookings.find({'instructor': username}, {'_id': 0}))
+        bookings = list(mongo.db.bookings.find({'instructor': username}))
 
     return render_template("bookingCalender.html", username=username, bookings=bookings, account_type=get_user_account_type())
+
+
+@app.route("/booking/<booking_id>/cancel", methods=["GET", "POST"])
+def cancel_booking(booking_id):
+    if not is_user_logged_in():
+        return redirect(url_for("login"))
+
+    mongo.db.bookings.delete_one({"_id": ObjectId(booking_id)})
+    flash('Booking Canceled!')
+    return redirect(url_for('view_bookings'))
+
+
 
 
 @app.route("/users/manage", methods=["GET", "POST"])
