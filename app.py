@@ -84,7 +84,6 @@ def register():
 
         # put the new user into 'session' cookie
         session["user"] = request.form.get("username")
-        session["account_type"] = request.form.get("account_type")
         flash("Registration Successful!")
         return redirect(url_for("view_bookings", username=session["user"]))
 
@@ -200,7 +199,6 @@ def booking_calender():
     else:
         bookings = list(mongo.db.bookings.find({'instructor': username}, {'_id': 0}))
 
-
     return render_template("bookingCalender.html", username=username, bookings=bookings, account_type=get_user_account_type())
 
 
@@ -234,7 +232,6 @@ def edit_user(user_id):
         mongo.db.users.update({"_id": ObjectId(user_id)}, submit)
         flash("User profile Successfully Updated")
         return redirect(url_for("user_manager"))
-
 
     return redirect(url_for("user_manager"))
 
