@@ -137,7 +137,7 @@ def book_lesson():
         return redirect(url_for("login"))
          # checks if user is logged in
     instructors = list(mongo.db.users.find({"account_type": "instructor"}))  # Gets list of users to get the driving instructor select input
-    
+
     if request.method == "POST":
         booking = {
             'instructor': request.form.get("instructor").lower(),
@@ -233,10 +233,10 @@ def edit_user(user_id):
         }
         mongo.db.users.update({"_id": ObjectId(user_id)}, submit)
         flash("User profile Successfully Updated")
-        return redirect(url_for("userManager"))
+        return redirect(url_for("user_manager"))
 
-    users = list(mongo.db.users.find().sort("username", 1))
-    return render_template("userManager.html", users=users, account_type=get_user_account_type())
+
+    return redirect(url_for("user_manager"))
 
 
 if __name__ == "__main__":
