@@ -23,7 +23,7 @@
           <div class="row">
             <div class='form-field col s12'>
               <h4 class="center-align">Choose an Instructor</h4>
-              <select id="instructor-selector" class="browser-default filled-in required validate" name="instructor">
+              <select id="instructor-selector" class="browser-default filled-in required validate" name="instructor" required>
                 <option value="" disabled selected>Choose instructor</option>
                 {% for instructor in instructors %}
                 <option value="{{ instructor.username }}">{{ instructor.first_name }} {{ instructor.last_name }}
@@ -47,7 +47,7 @@
               <div class="input-field col s12">
                 <div id='date-picker-div' class="row">
                   <input id="lesson-booking-date-picker" name='date' type="text" class="datepicker required validate"
-                    placeholder="choose a day">
+                    placeholder="choose a day" required>
                 </div>
               </div>
             </div>
@@ -65,7 +65,7 @@
           <div class="row">
             <div class='form-field'>
               <h4 class="center-align">Choose a Time Slot</h4>
-              <select id="time-selector" class="browser-default filled-in required validate" name="time_slot" >
+              <select id="time-selector" class="browser-default filled-in required validate" name="time_slot" required>
               </select>
             </div>
             <div class="step-actions">
