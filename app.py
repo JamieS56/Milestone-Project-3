@@ -105,7 +105,7 @@ def login():
             # ensure hashed password matches user input
             if check_password_hash(existing_user["password"], request.form.get("password")):
                 session["user"] = request.form.get("username").lower()
-                flash("Welcome, {}".format(request.form.get("username")))
+                flash("Welcome, {}".format(request.form.get("username").capitalize()))
                 return redirect(url_for("home", username=session["user"], account_type=get_user_account_type()))
 
             else:
@@ -229,6 +229,21 @@ def search():
     query = request.form.get("query")
     users = list(mongo.db.users.find({"$text": {"$search": query}}))
     return render_template("userManager.html", users=users, account_type=get_user_account_type())
+
+
+@app.route("/booking/search", methods=["GET", "POST"])
+def search_booking():
+    username = session['user']
+    user_account_type = mongo.db.users.find_one({"username": username})["account_type"]
+    query = request.form.get("query")
+    if user_account_type == 'admin':
+        bookings = list(mongo.db.bookings.find({"$text": {"$search": query}}))
+
+    else:
+        bookings = list(mongo.db.bookings.find({"$text": {"$search": query}, 'instructor': username}))
+
+
+    return render_template("bookingCalender.html", bookings=bookings, account_type=get_user_account_type())
 
 
 @app.route("/user/<user_id>/edit", methods=["GET", "POST"])

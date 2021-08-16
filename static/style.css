@@ -46,6 +46,9 @@ main {
   position: relative;
   padding: 10px 20px;
 }
+.edit-user-row{
+  margin:10px;
+}
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;

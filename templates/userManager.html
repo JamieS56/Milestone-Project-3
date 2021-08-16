@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>User Manager</h1>
+<h1 class="center-align">User Manager</h1>
 
 <div class="row card-panel grey lighten-5">
     <form action="{{ url_for('search') }}" method="post" class="col s12">
-        <div class="row valign-wrapper center-align">
+        <div class="row center-align">
             <div class="input-field col s12 m8">
                 <i class="fas fa-search prefix light-blue-text text-darken-4"></i>
                 <input type="text" name="query" id="query" minlength="3" class="validate" required>
@@ -28,12 +28,12 @@
 
             </div>
             <div class="col s9">
-                <strong>{{ user.username }}</strong>
+                <strong>{{ user.username|capitalize }}</strong>
             </div>
         </div>
         <div class="collapsible-body">
             <form class="col s12 editUserForm" method="POST" action="{{ url_for('edit_user', user_id=user._id) }}">
-                <div class="row">
+                <div class="row edit-user-row">
                     <div class="input-field col s6">
                         <input value="{{ user.first_name }}" id="first_name" name='first_name' type="text"
                             class="validate" disabled="disabled">
@@ -46,28 +46,29 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s12">
+                    <div class="input-field col s12 edit-user-row">
                         <input value="{{ user.phone_number }}" id="phone-number" name='phone-number' type="text"
                             class="validate" disabled>
                         <label for="phone-number">Phone</label>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s12">
+                    <div class="input-field col s12 edit-user-row">
                         <input value="{{ user.email }}" id="email" name='email' type="email" class="validate" disabled>
                         <label for="email">Email</label>
                     </div>
                 </div>
-                <div class="input-field col s12">
+                <div class="input-field col s12 edit-user-row">
                     <input value="{{ user.username }}" id="username" name='username' type="text" class="validate"
                         required disabled>
                     <label for="username">Username</label>
                 </div>
-                
-                <div class="col s12">
+
+                <div class="col s12 edit-user-row">
                     <label>Account Type</label>
                     <select class="browser-default" name="account_type" disabled>
-                        <option value="{{ user.account_type }}" disabled selected>{{ user.account_type }}</option>
+                        <option value="{{ user.account_type }}" disabled selected>{{ user.account_type|capitalize }}
+                        </option>
                         <option value="customer">Customer</option>
                         <option value="instructor">Instructor</option>
                         <option value="admin">Admin</option>
@@ -75,13 +76,18 @@
 
                 </div>
 
-                <button type="submit" class="col s12 btn-large light-blue darken-4 text-shadow" required>
-                    Submit
-                </button>
+                <div class="row edit-user-row">
+                    <button type="submit" class="col s12 m5 btn-large light-blue darken-4 text-shadow" required>
+                        Submit
+                    </button>
+                    <button type="button"
+                        class="col s12 m5 btn-large light-blue lighten-1 right editUserButton">Edit</button>
+                </div>
             </form>
 
 
-            <button class="btn-small light-blue lighten-1 right-align editUserButton">Edit</button>
+
+
 
         </div>
     </li>

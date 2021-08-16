@@ -17,13 +17,20 @@
     </div>
 
     <div class="row center-align">
-      <div class="col s6"><a class="waves-effect waves-light btn-large red darken-3 "
-          href="{{ url_for('login') }}">Login</a>
-      </div>
-      <div class="col s6">
-        <a class="waves-effect waves-light btn-large red darken-3 "
-          href="{{ url_for('book_lesson', username=session['user']) }}">Book Now!</a>
-      </div>
+      {% if session.user %}
+        <div class="col s12">
+          <a class="waves-effect waves-light btn-large red darken-3 "
+            href="{{ url_for('book_lesson', username=session['user']) }}">Book Now!</a>
+        </div>
+      {% else %}
+        <div class="col s6"><a class="waves-effect waves-light btn-large red darken-3 "
+            href="{{ url_for('login') }}">Login</a>
+        </div>
+        <div class="col s6">
+          <a class="waves-effect waves-light btn-large red darken-3 "
+            href="{{ url_for('book_lesson', username=session['user']) }}">Book Now!</a>
+        </div>
+      {% endif %}
     </div>
   </section>
   <section class="row">

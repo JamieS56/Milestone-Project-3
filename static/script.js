@@ -28,6 +28,8 @@ $(document).ready(function () {
         $('select').removeAttr('disabled')
     })
 
+    $("#copyright").text(new Date().getFullYear());
+
 
     $('.refresh-time-slots').click(getAvailableSlots)
 
