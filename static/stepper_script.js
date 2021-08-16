@@ -1,3 +1,5 @@
+// This is all code that allows the Materialize stepper to work in the booking form correctly. It was taken from Floris List's code pen.
+
 $(document).ready(function() {
     $('.stepper').activateStepper();
   })

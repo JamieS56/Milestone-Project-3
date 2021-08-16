@@ -1,13 +1,7 @@
-footer i{
-    align-self: center;
-    margin: auto;
-    padding:0;
-
-}
+/* ------------ Styling used across all html templates ------------ */
 h1, h2, h3, h4, h5{
   font-family: 'Ubuntu', sans-serif;
 }
-
 body {
     display: flex;
     min-height: 100vh;
@@ -18,11 +12,18 @@ body {
 main {
     flex: 1 0 auto;
   }
+footer i{
+    align-self: center;
+    margin: auto;
+    padding:0;
+}
 #nav-logo{
   height:50px;
   width:50px;
   padding:5px;
 }
+/* ---------------------------------------------------------------- */
+/* --------------------- Home page styling -------------------------*/
 #hero-image{
   width:90%;
   padding:10px;
@@ -37,6 +38,8 @@ main {
   border-radius: 10px;
   margin:10px;
 }
+/* ---------------------------------------------------------------- */
+/* ------------------------ Card styling ---------------------------*/
 .card-content{
   padding: 15px;
 }
@@ -49,6 +52,10 @@ main {
 .edit-user-row{
   margin:10px;
 }
+
+
+
+/* This css is required to style the materialize stepper, it was created by Floris List */
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
@@ -71,3 +78,4 @@ main {
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
+/* ---------------------------------------------------------------------------------------- */

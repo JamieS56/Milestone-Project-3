@@ -237,7 +237,7 @@ def search_booking():
     user_account_type = mongo.db.users.find_one({"username": username})["account_type"]
     query = request.form.get("query")
     if user_account_type == 'admin':
-        bookings = list(mongo.db.bookings.find({"$text": {"$search": query}}))
+        bookings = list(mongo.db.bookings.find({"$text": {"$search": query}}).sort('date'))
 
     else:
         bookings = list(mongo.db.bookings.find({"$text": {"$search": query}, 'instructor': username}))

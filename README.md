@@ -20,18 +20,19 @@ The goal of DLB is to make the act of booking a driving lesson as quick and simp
 
 * An application where you can easily manage the users on it.
 * A good looking app that looks nice on both desktop and mobile.
-* Clean and simple code with good comments
 
 
 ## Design
 
 * Color scheme:
-    * The two colors im gunna use are red and white, as these are the colors on 'L plates' that learner drivers have.
+    The three colors I'm going to use are red, white and grey as these are the colors on 'L plates' that learner drivers have and grey is a professional looking color for the nav bar and footer and works nicely with the red and white.
+
 * Typography:
-    * 
+     
+
 * Images:
-    * I'm gunna put a hero image of a learner driver and there ar n the home page to instantley show visiting users what this website is about.
-    plus i will have the logo at the top of the nav bar on each page.
+    I'm gunna put a hero image of a learner driver and there ar n the home page to instantley show visiting users what this website is about.
+    plus I will have the logo at the top of the nav bar on each page.
 
 ## Wireframes
 
@@ -44,7 +45,7 @@ The goal of DLB is to make the act of booking a driving lesson as quick and simp
 * Able to edit user profiles(excluding passwords)
 * Able to delete and edit bookings
 * have different access levels based on account type.
-* Searh booking and user features.
+* Search booking and user features.
 
 
 ## Technologies Used
@@ -95,10 +96,10 @@ The goal of DLB is to make the act of booking a driving lesson as quick and simp
 
 3. "I want to be able to delete bookings and personalize my available time slots."
 
-    Again on the callender booking page there will be an edit or delete button for the instructor to  change or delete there bookings if there is any need to 
+    The ability for both instructors and students to cancel booked lessons is there even with a confirmation popup to avoid mistakes. The ability to personalise time slots though is not yet implemented and for more information please look at the future scope section.
 
 
-### Instructor Goals Testing:
+### Student Goals Testing:
 
 1. "I want to be able to easily book a lesson."
 
@@ -106,15 +107,47 @@ The goal of DLB is to make the act of booking a driving lesson as quick and simp
 
 2. "I want to be able to see what lessons I have booked."
 
-    The "My Bookings" page clearly shows all bookings and information about the booking to the user.
+    The "My Bookings" page clearly shows all bookings and information about the booking to the user, and can be searched by student, instructor or date.
+
+
+
+### My Goals Testing:
+1. "An application where you can easily manage the users on it."
+    I have a fully fonctioning user manager page where admins can search through the database of users and edit their profiles, excluding passwords, if needed and change account types. For easy use there is a search feature where you can search users by first name, last name and username.
+
+2. "A good looking app that looks nice on both desktop and mobile."
+
+    With the help of materialize the app looks sleek on desktop, tablet and mobile. I have fully used there grid system throughout development to create a responsive layout.
+    I also have used a materialize stepper which was created by [Floris List](https://codepen.io/flist) which I found on [code pen](https://codepen.io/flist/pen/mqXemY). It works great for what I needed which was a simple form layout which looks great on all screen sizes and keeps you on the same page throughout the whole booking proccess. Originally I had split the booking across two pages so i could load the timeslots with a new page but because of the fetch function i could load in the data without refreshing the page.
+
 
 ### Other teting: 
 * Testing sidenav
-The sidenav that is used so mobile users can access the menu wasn't working. This was because jquery wasn't connected so addded it to the base html and works now.
+The sidenav that is used so mobile users can access the menu wasn't working. This was because jquery wasn't connected so added it to the base html and works now.
+
+* Passing data using fetch
+I started off using session to store data and make it available on the html page. Now I am calling the python function via a js fetch call. I had a problem where the call was returning the event data and not the time slot data I wanted so using the .json() functionImanaged to extract the correct data and injected it into my select input as options using .innerHTML.
+
+`    
+
+    async function getAvailableSlots(_eventdata, instructor = $("#instructor-selector").val(), date = $('#lesson-booking-date-picker').val()) {
+
+        response = await fetch(`/get_available_slots?date=${date}&instructor=${instructor}`)
+        response.json().then(data => {
+            slots = data.slots
+            let timeSlotsHTML = `<option value="" disabled selected>Choose Time Slot</option>`;
+            for (slot in slots) {
+                timeSlotsHTML += `<option value="${slots[slot]}">${slots[slot]}</option>`
+            }
+            document.getElementById('time-selector').innerHTML = timeSlotsHTML;
+        })
+    }
+
+`
 
 ## Deployment
 ### Notes 
-For the first couple of weeks of my project i din't realise I was pushong straight to heroku and not to github, which i realised when the gitpod workspaces went down and i lost the work on the workspace and it wasnt on github but was on heroku. so i cloned the heroku repository into a new workspace for my project using 'heroku git:clone -a APP-NAME' and reinstalled the packages that i needed and remade my env file.
+For the first couple of weeks of my projectIdin't realise I was pushong straight to heroku and not to github, which I realised when the gitpod workspaces went down and I lost the work on the workspace and it wasnt on github but was on heroku. so I cloned the heroku repository into a new workspace for my project using 'heroku git:clone -a APP-NAME' and reinstalled the packages that I needed and remade my env file.
 
 
 
