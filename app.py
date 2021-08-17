@@ -17,28 +17,28 @@ app.secret_key = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
 
-ALL_SLOTS = ['10:00-11:00', '11:00-12:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00']
+ALL_SLOTS = ['10:00-11:00', '11:00-12:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00']      # this is a list of the bookable times to the user to compare to what is already booked in the database. in the future it will be able to be set by the instructor and fetched from the database.
 NEW_USER_ACCOUNT_TYPE = 'new_user'
 TODAY = date.today()
 
-
+# Check if user is logged in.
 def is_user_logged_in():
     if session.get("user"):
         return True
     return False
 
-
+# Gets the user account type to set nav bar and other functions on the page.
 def get_user_account_type():
     account = mongo.db.users.find_one({'username': session["user"]}, {'_id': 0, 'account_type': 1})
     account_type = account["account_type"]
     return account_type
 
-
+# Gets list of all users in the db.
 def get_users():
     users = list(mongo.db.users.find().sort("username", 1))
     return users
 
-
+# Home page
 @app.route("/")
 @app.route("/home")
 def home():
@@ -48,7 +48,7 @@ def home():
         account_type = NEW_USER_ACCOUNT_TYPE
     return render_template('home.html', account_type=account_type)
 
-
+# Registration page
 @app.route("/register", methods=["GET", "POST"])
 def register():
     # If logged in, redirect to home
@@ -64,6 +64,7 @@ def register():
             flash("Username already exists")
             return redirect(url_for("register"))
 
+        # check if passwords match
         password = request.form.get("password")
         confirmPassword = request.form.get("confirm-password")
 
@@ -71,6 +72,7 @@ def register():
             flash("Your passwords do not match")
             return redirect(url_for("register"))
 
+        # data being sent to the db
         register = {
             "username": request.form.get("username").lower(),
             "password": generate_password_hash(request.form.get("password")),
@@ -83,13 +85,12 @@ def register():
 
         mongo.db.users.insert_one(register)
 
-        # put the new user into 'session' cookie
         flash("Registration Successful!")
         return redirect(url_for("login"))  # Getting redirected to login here to delay the account type getting requested from the db because it was getting requested to early and threw a NoneType error.
 
     return render_template("register.html")
 
-
+# Login page
 @app.route("/login", methods=["GET", "POST"])
 def login():
     # If logged in, redirect to home
@@ -120,7 +121,7 @@ def login():
 
     return render_template("login.html")
 
-
+# Logout button
 @app.route("/logout")
 def logout():
     # remove user from session cookie
@@ -128,15 +129,18 @@ def logout():
     session.pop("user")
     return redirect(url_for("login"))
 
-
+# Book lesson page
 @app.route("/booking/create", methods=["GET", "POST"])
 def book_lesson():
-    # this is a list of the bookable times to the user to compare to what is already booked in the database. in the future it will be able to be set by the instructor and fetched from the database.
+
+     # checks if user is logged in
     if not is_user_logged_in():
         return redirect(url_for("login"))
-         # checks if user is logged in
-    instructors = list(mongo.db.users.find({"account_type": "instructor"}))  # Gets list of users to get the driving instructor select input
 
+    # Gets list of users to get the driving instructor select input
+    instructors = list(mongo.db.users.find({"account_type": "instructor"}))
+
+    # Booking form data that gets written to db
     if request.method == "POST":
         booking = {
             'instructor': request.form.get("instructor").lower(),
@@ -149,9 +153,10 @@ def book_lesson():
         flash('Booking Succesfull')
     return render_template('bookLesson.html', instructors=instructors, account_type=get_user_account_type())
 
-
+# This function works out the availabe slots from what slots have already been booked. It gets called from the js file via a fetch call.
 @app.route("/get_available_slots")
 def get_available_slots():
+    # this is the data that is required to find the correct booked slots.
     booking = {
       'date': request.args.get("date", ""),
       "instructor": request.args.get("instructor", "")
@@ -173,30 +178,34 @@ def get_available_slots():
 
     return jsonify({"slots": available_slots})
 
-
+# View bookings page
 @app.route("/bookings")
 def view_bookings():
     if not is_user_logged_in():
         return redirect(url_for("login"))
 
     username = session["user"]
-    bookings = list(mongo.db.bookings.find({'student': username}))
-    for booking in bookings:  # Changes the instructors username to there actual name when users view there booked lessons.
+    bookings = list(mongo.db.bookings.find({'student': username}))      # Finds all bookings under the students name
+
+    # Changes the instructors username to there actual name when users view there booked lessons.
+    for booking in bookings:  
         instructor = mongo.db.users.find_one({'username': booking["instructor"]}, {'first_name': 1, 'last_name': 1})
         instructor_name = instructor['first_name'] + ' ' + instructor['last_name']
         booking['instructor'] = instructor_name
 
     return render_template("view_bookings.html", username=username, bookings=bookings, account_type=get_user_account_type())
 
-
+# booking calender page
 @app.route("/booking/calender", methods=["GET", "POST"])
 def booking_calender():
     if not is_user_logged_in():
         return redirect(url_for("login"))
 
     username = session["user"]
-    user_account_type = mongo.db.users.find_one({"username": username})["account_type"]
+    user_account_type = get_user_account_type()
     bookings = []
+
+    # shows all booked lessons for the instructor that is logged in or if an admin is logged in they can see all the bookings.
     if user_account_type == 'admin':
         bookings = list(mongo.db.bookings.find())
 
@@ -205,7 +214,7 @@ def booking_calender():
 
     return render_template("bookingCalender.html", username=username, bookings=bookings, account_type=get_user_account_type())
 
-
+# cancel booking button
 @app.route("/booking/<booking_id>/cancel", methods=["GET", "POST"])
 def cancel_booking(booking_id):
     if not is_user_logged_in():
@@ -215,42 +224,21 @@ def cancel_booking(booking_id):
     flash('Booking Canceled!')
     return redirect(url_for('view_bookings'))
 
-
-
-
+# User manager page
 @app.route("/users/manage", methods=["GET", "POST"])
 def user_manager():
     users = get_users()
     return render_template("userManager.html", users=users, account_type=get_user_account_type())
 
-
-@app.route("/search", methods=["GET", "POST"])
-def search():
-    query = request.form.get("query")
-    users = list(mongo.db.users.find({"$text": {"$search": query}}))
-    return render_template("userManager.html", users=users, account_type=get_user_account_type())
-
-
-@app.route("/booking/search", methods=["GET", "POST"])
-def search_booking():
-    username = session['user']
-    user_account_type = mongo.db.users.find_one({"username": username})["account_type"]
-    query = request.form.get("query")
-    if user_account_type == 'admin':
-        bookings = list(mongo.db.bookings.find({"$text": {"$search": query}}).sort('date'))
-
-    else:
-        bookings = list(mongo.db.bookings.find({"$text": {"$search": query}, 'instructor': username}))
-
-
-    return render_template("bookingCalender.html", bookings=bookings, account_type=get_user_account_type())
-
-
+# Edit user form
 @app.route("/user/<user_id>/edit", methods=["GET", "POST"])
 def edit_user(user_id):
     if request.method == "POST":
+        
+        # Finds which user there edditing
         current_user = mongo.db.users.find_one(
             {"username": request.form.get("username").lower()})
+        # The eddited data
         submit = {
             "username": request.form.get("username").lower(),
             'password': current_user['password'],
@@ -265,6 +253,28 @@ def edit_user(user_id):
         return redirect(url_for("user_manager"))
 
     return redirect(url_for("user_manager"))
+
+# user search function
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    query = request.form.get("query")
+    users = list(mongo.db.users.find({"$text": {"$search": query}}))
+    return render_template("userManager.html", users=users, account_type=get_user_account_type())
+
+# booking search function
+@app.route("/booking/search", methods=["GET", "POST"])
+def search_booking():
+    username = session['user']
+    user_account_type = mongo.db.users.find_one({"username": username})["account_type"]
+    query = request.form.get("query")
+    # returns booking calaender so same checks about which instructor, or if an admin is logged in are made
+    if user_account_type == 'admin':
+        bookings = list(mongo.db.bookings.find({"$text": {"$search": query}}).sort('date'))
+    else:
+        bookings = list(mongo.db.bookings.find({"$text": {"$search": query}, 'instructor': username}))
+
+    return render_template("bookingCalender.html", bookings=bookings, account_type=get_user_account_type())
+
 
 
 if __name__ == "__main__":
