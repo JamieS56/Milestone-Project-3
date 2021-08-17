@@ -12,7 +12,7 @@
 
 <h1 class="center-align">Book a Lesson</h1>
 
-<div class="container">
+
 
   <form method="POST" action="{{ url_for('book_lesson') }}">
     <ul class="stepper parallel horizontal">
@@ -81,7 +81,7 @@
             <div class='form-field'>
               <h4 class="center-align">Book</h4>
               <textarea id="optionalInfo" name="optional_details" class="materialize-textarea"
-                placeholder="Add any optional info you want here..."></textarea>
+                placeholder="Add optional info here..."></textarea>
             </div>
           </div>
           <div class="step-actions">
@@ -94,6 +94,6 @@
       </li>
     </ul>
   </form>
-</div>
+
 
 {% endblock %}

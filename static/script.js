@@ -33,7 +33,8 @@ $(document).ready(function () {
 
         response = await fetch(`/get_available_slots?date=${date}&instructor=${instructor}`) // Here the python function is being called with the date and instructor variables.
         response.json().then(data => {      
-            slots = data.slots              // Here the data gets turned into json so that it can read the available time slots and add it to the html.
+            slots = data.slots 
+            console.log(slots)             // Here the data gets turned into json so that it can read the available time slots and add it to the html.
             let timeSlotsHTML = `<option value="" disabled selected>Choose Time Slot</option>`;
             for (slot in slots) {
                 timeSlotsHTML += `<option value="${slots[slot]}">${slots[slot]}</option>`

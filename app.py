@@ -140,8 +140,23 @@ def book_lesson():
     # Gets list of users to get the driving instructor select input
     instructors = list(mongo.db.users.find({"account_type": "instructor"}))
 
+
+
     # Booking form data that gets written to db
     if request.method == "POST":
+        print(request.form.get("instructor"))
+        print(request.form.get("date"))
+
+        if request.form.get('time_slot') is None:
+            flash('please choose a time slot')
+            return render_template('bookLesson.html', instructors=instructors, account_type=get_user_account_type())
+        elif request.form.get("instructor") is None:
+            flash('please fill in instructor')
+            return render_template('bookLesson.html', instructors=instructors, account_type=get_user_account_type())
+        elif request.form.get("date") == '':
+            flash('please fill in date')
+            return render_template('bookLesson.html', instructors=instructors, account_type=get_user_account_type())
+
         booking = {
             'instructor': request.form.get("instructor").lower(),
             'student': session['user'],
@@ -149,6 +164,8 @@ def book_lesson():
             'time_slot': request.form.get('time_slot'),
             'optional_details': request.form.get('optional_details')
           }
+        print(booking)
+
         mongo.db.bookings.insert_one(booking)
         flash('Booking Succesfull')
     return render_template('bookLesson.html', instructors=instructors, account_type=get_user_account_type())
@@ -156,14 +173,21 @@ def book_lesson():
 # This function works out the availabe slots from what slots have already been booked. It gets called from the js file via a fetch call.
 @app.route("/get_available_slots")
 def get_available_slots():
+
     # this is the data that is required to find the correct booked slots.
     booking = {
       'date': request.args.get("date", ""),
       "instructor": request.args.get("instructor", "")
     }
 
-    booked_slots = []
+    if booking['date'] is None:
+        return 'date'
+
+    if booking['instructor'] == '':
+        return ''
+
     available_slots = ALL_SLOTS
+    booked_slots = []
 
     existing_bookings = mongo.db.bookings.find(booking, {"_id": 0, 'time_slot': 1})
     for existing_booking in existing_bookings:
