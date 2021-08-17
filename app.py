@@ -29,7 +29,8 @@ def is_user_logged_in():
 
 
 def get_user_account_type():
-    account_type = mongo.db.users.find_one({'username': session["user"]})['account_type']
+    account = mongo.db.users.find_one({'username': session["user"]}, {'_id': 0, 'account_type': 1})
+    account_type = account["account_type"]
     return account_type
 
 
@@ -83,9 +84,8 @@ def register():
         mongo.db.users.insert_one(register)
 
         # put the new user into 'session' cookie
-        session["user"] = request.form.get("username")
         flash("Registration Successful!")
-        return redirect(url_for("view_bookings", username=session["user"]))
+        return redirect(url_for("login"))  # Getting redirected to login here to delay the account type getting requested from the db because it was getting requested to early and threw a NoneType error.
 
     return render_template("register.html")
 
