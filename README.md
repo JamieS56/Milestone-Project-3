@@ -150,6 +150,31 @@ The goal of DLB is to make the act of booking a driving lesson as quick and simp
 
     When an account is created it writes the accoun_type to the db but it didn't write it quick enough and it was getting looked up when `get_account_type()` is called when rendering the home page. To get around this I render the login page making the user login again which gives enough time for the account to be written to the db and then be called after the user has logged in.
 
+### Testing web page
+
+#### Nav Bar and Links
+
+    All links in the footer redirect to the correct website on a new tab for the user to view our socials. all links within the website linking with other pages all work correctly and consistently plus correct links show up in the nav bar for who is logged in and there account type. They also all work correct;y on mobile and because of the hidden side nav are easily accessibly and look good.
+
+#### Booking Lessons
+
+    The booking lessons form works well all data is successfully written to the data base and if any of the required fields aren't filled in it will flash a message on screen and not write any data to the database. I would have used the required attribute like in the registration and login form but for some reason it didn't work probbably to do fith the code for the stepper but i'm not sure what part so this was my solution.
+
+#### Viewing bookings
+
+    Viewing bookings works well, you can only see the bookings you've booked and no one elses it looks neat and clean and you can cancel a booking if you want to and even has a warning popup to avoid unwanted cancelations.
+
+#### Booking callender
+
+    The booking callender works well, the instructor can view all lessons that are booked to them, can cancel lessons, edit bookings and can even search through them by name and date.
+
+#### User Manager
+
+#### Create account/ Login
+
+#### Responsive design
+
+
 
 ## Deployment
 

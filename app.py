@@ -21,11 +21,13 @@ ALL_SLOTS = ['10:00-11:00', '11:00-12:00', '13:00-14:00', '14:00-15:00', '15:00-
 NEW_USER_ACCOUNT_TYPE = 'new_user'
 TODAY = date.today()
 
+
 # Check if user is logged in.
 def is_user_logged_in():
     if session.get("user"):
         return True
     return False
+
 
 # Gets the user account type to set nav bar and other functions on the page.
 def get_user_account_type():
@@ -33,10 +35,12 @@ def get_user_account_type():
     account_type = account["account_type"]
     return account_type
 
+
 # Gets list of all users in the db.
 def get_users():
     users = list(mongo.db.users.find().sort("username", 1))
     return users
+
 
 # Home page
 @app.route("/")
@@ -47,6 +51,7 @@ def home():
     else:
         account_type = NEW_USER_ACCOUNT_TYPE
     return render_template('home.html', account_type=account_type)
+
 
 # Registration page
 @app.route("/register", methods=["GET", "POST"])
@@ -90,6 +95,7 @@ def register():
 
     return render_template("register.html")
 
+
 # Login page
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -121,6 +127,7 @@ def login():
 
     return render_template("login.html")
 
+
 # Logout button
 @app.route("/logout")
 def logout():
@@ -128,6 +135,7 @@ def logout():
     flash("You have been logged out")
     session.pop("user")
     return redirect(url_for("login"))
+
 
 # Book lesson page
 @app.route("/booking/create", methods=["GET", "POST"])
@@ -170,6 +178,7 @@ def book_lesson():
         flash('Booking Succesfull')
     return render_template('bookLesson.html', instructors=instructors, account_type=get_user_account_type())
 
+
 # This function works out the availabe slots from what slots have already been booked. It gets called from the js file via a fetch call.
 @app.route("/get_available_slots")
 def get_available_slots():
@@ -202,6 +211,7 @@ def get_available_slots():
 
     return jsonify({"slots": available_slots})
 
+
 # View bookings page
 @app.route("/bookings")
 def view_bookings():
@@ -218,6 +228,7 @@ def view_bookings():
         booking['instructor'] = instructor_name
 
     return render_template("view_bookings.html", username=username, bookings=bookings, account_type=get_user_account_type())
+
 
 # booking calender page
 @app.route("/booking/calender", methods=["GET", "POST"])
@@ -238,15 +249,43 @@ def booking_calender():
 
     return render_template("bookingCalender.html", username=username, bookings=bookings, account_type=get_user_account_type())
 
+
+@app.route("/booking/<booking_id>/edit", methods=["GET", "POST"])
+def edit_booking(booking_id):
+    if request.method == "POST":
+        current_booking = mongo.db.bookings.find_one(
+            {"_id": ObjectId(booking_id)})
+
+        booking = {
+            'instructor': current_booking['instructor'],
+            'student': current_booking['student'],
+            'date': request.form.get("date"),
+            'time_slot': request.form.get('time_slot'),
+            'optional_details': request.form.get('optional_details')
+        }
+
+        mongo.db.bookings.update({"_id": ObjectId(booking_id)}, booking)
+        flash("Booking Successfully Updated")
+        return redirect(url_for('booking_calender'))
+
+    return redirect(url_for('booking_calender'))
+
+
+
 # cancel booking button
 @app.route("/booking/<booking_id>/cancel", methods=["GET", "POST"])
 def cancel_booking(booking_id):
     if not is_user_logged_in():
         return redirect(url_for("login"))
+        account_type = get_user_account_type()
 
     mongo.db.bookings.delete_one({"_id": ObjectId(booking_id)})
     flash('Booking Canceled!')
-    return redirect(url_for('view_bookings'))
+    if account_type == "customer":
+        return redirect(url_for('view_bookings'))
+
+    return redirect(url_for('booking_calender'))
+
 
 # User manager page
 @app.route("/users/manage", methods=["GET", "POST"])
@@ -254,11 +293,12 @@ def user_manager():
     users = get_users()
     return render_template("userManager.html", users=users, account_type=get_user_account_type())
 
+
 # Edit user form
 @app.route("/user/<user_id>/edit", methods=["GET", "POST"])
 def edit_user(user_id):
     if request.method == "POST":
-        
+   
         # Finds which user there edditing
         current_user = mongo.db.users.find_one(
             {"username": request.form.get("username").lower()})

@@ -28,17 +28,27 @@ $(document).ready(function () {
     })
 
     // This is the code that injects the time slots into the booking form, suggested by my mentor Akshat Garg.
-    $('.refresh-time-slots').click(getAvailableSlots)
-    async function getAvailableSlots(_eventdata, instructor = $("#instructor-selector").val(), date = $('#lesson-booking-date-picker').val()) {
+    $('.refresh-time-slots').click(function(){
+        getAvailableSlots($("#instructor-selector").val(), $('#lesson-booking-date-picker').val())
+    })
 
-        response = await fetch(`/get_available_slots?date=${date}&instructor=${instructor}`) // Here the python function is being called with the date and instructor variables.
+    $('#time-selector').focus(function(){
+        getAvailableSlots($("#instructor-username").text(), document.getElementById('lesson-booking-date-picker-edit').value)
+    })
+
+    async function getAvailableSlots(instructor, date) {
+        console.log(instructor)
+        console.log(date)
+
+        response = await fetch(`/get_available_slots?date=${date}&instructor=${instructor.toLowerCase()}`) // Here the python function is being called with the date and instructor variables.
         response.json().then(data => {      
-            slots = data.slots 
-            console.log(slots)             // Here the data gets turned into json so that it can read the available time slots and add it to the html.
-            let timeSlotsHTML = `<option value="" disabled selected>Choose Time Slot</option>`;
+            slots = data.slots            // Here the data gets turned into json so that it can read the available time slots and add it to the html.
+            let timeSlotsHTML = document.getElementById('disabled-select').outerHTML;
             for (slot in slots) {
+                console.log(timeSlotsHTML)
                 timeSlotsHTML += `<option value="${slots[slot]}">${slots[slot]}</option>`
             }
+
             document.getElementById('time-selector').innerHTML = timeSlotsHTML;  // finally this is where the html gets injected into the time-selector input ready for the user to select.
         })
     }
