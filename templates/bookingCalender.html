@@ -33,7 +33,8 @@
             <p>Details: {{ booking.optional_details }}</p>
         </div>
         <div class="card-action right-align">
-            <a class="waves-effect waves-light red btn modal-trigger" href="#editModal{{ booking._id }}">Edit</a>
+            <a class="waves-effect waves-light light-blue lighten-1 btn modal-trigger"
+                href="#editModal{{ booking._id }}">Edit</a>
             <a class="waves-effect waves-light red btn modal-trigger" href="#cancelModal{{ booking._id }}">Cancel</a>
         </div>
     </div>
@@ -46,28 +47,34 @@
     <div class="modal-content">
         <h4>Edit Booking</h4>
         <form method="POST" action="{{ url_for('edit_booking', booking_id=booking._id) }}">
-
             <input value="{{ booking._id }}" class='hide' disabled>
+            <div class="row">
+                <div class="col s12 edit-booking-modal-input">
+                    <label  class='left' for='date'>Date</label>
+                    <div id='date-picker-div' class="">
+                        <input id="lesson-booking-date-picker-edit" value="{{ booking.date }}" name='date' type="text"
+                            class="datepicker required validate" placeholder="choose a day" required>
+                    </div>
 
-            <div id='date-picker-div' class="">
-                <input id="lesson-booking-date-picker-edit" value="{{ booking.date }}" name='date' type="text"
-                    class="datepicker required validate" placeholder="choose a day" required>
+                </div>
+                <div class="col s12 edit-booking-modal-input">
+                    <label id='time-picker-label' class='left' for='time_slot'>Time</label>
+                    <select id="time-selector" class="browser-default filled-in required validate" name="time_slot" required>
+                        <option id='disabled-select' value="{{ booking.time_slot }}" selected>{{ booking.time_slot }}</option>
+                    </select>
+                </div>
+                <div class="col s12 edit-booking-modal-input">
+                    <label class='left' for='optional_details'>Optional Details</label>
+                    <input value="{{ booking.optional_details }}" id="optional_details" name='optional_details' type="text" class="">
+                </div>
             </div>
-
-            <select id="time-selector" class="browser-default filled-in required validate" name="time_slot" required>
-                <option id='disabled-select' value="{{ booking.time_slot }}" selected>{{ booking.time_slot }}</option>
-
-            </select>
-
-            <input value="{{ booking.optional_details }}" id="optional_details" name='optional_details' type="text"
-                class="">
 
 
 
     </div>
     <div class="modal-footer">
-        <button type='submit' class="modal-close waves-effect waves-light btn-small">Update</button>
-        <a href="" class="modal-close waves-effect waves-light btn-small">Close</a>
+        <button type='submit' class="modal-close waves-effect light-blue darken-4 waves-light btn-small">Update</button>
+        <a href="" class="modal-close waves-effect waves-light light-blue btn-small">Close</a>
     </div>
     </form>
 </div>
@@ -80,8 +87,8 @@
     </div>
     <div class="modal-footer">
         <a href="{{ url_for('cancel_booking', booking_id=booking._id) }}"
-            class="modal-close waves-effect waves-light btn-small">Cancel</a>
-        <a href="" class="modal-close waves-effect waves-light btn-small">Close</a>
+            class="modal-close waves-effect red waves-light btn-small">Cancel</a>
+        <a href="" class="modal-close waves-effect waves-light light-blue btn-small">Close</a>
     </div>
 </div>
 {% endfor %}

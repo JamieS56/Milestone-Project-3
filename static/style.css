@@ -53,7 +53,27 @@ footer i{
 .edit-user-row{
   margin:10px;
 }
+.edit-booking-modal-input{
+  padding:15px;
+}
+.edit-booking-modal-input input{
+  height: 2rem !important;
+}
+.edit-booking-modal-input label{
+margin-top: 10px;
+}
+#time-picker-label{
+  margin-bottom: 10px;
+}
+@media only screen and (max-width: 600px) {
 
+  .edit-modal{
+    width: 95vw;
+    height: 50vh;
+
+  }
+  
+}
 
 
 /* This css is required to style the materialize stepper, it was created by Floris List */
