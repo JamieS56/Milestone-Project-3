@@ -235,12 +235,24 @@ def booking_calendar():
         
         username = session["user"]
         user_account_type = get_user_account_type()
+        users = get_users()
         bookings = []
         # shows all booked lessons for the instructor that is logged in or if an admin is logged in they can see all the bookings.
         if user_account_type == 'admin':
             bookings = list(mongo.db.bookings.find())
+            for booking in bookings:
+                for user in users:
+                    if user['username'] == booking['student']:
+                        booking['student_phone'] = user['phone_number']
+                        booking['student_email'] = user['email']
+
         else:
             bookings = list(mongo.db.bookings.find({'instructor': username}))
+            for booking in bookings:
+                for user in users:
+                    if user['username'] == booking['student']:
+                        booking['student_phone'] = user['phone_number']
+                        booking['student_email'] = user['email']
 
         return render_template("booking_calendar.html", username=username, bookings=bookings, account_type=get_user_account_type())
 
@@ -254,7 +266,7 @@ def edit_booking(booking_id):
         return redirect(url_for("login"))
     # makes sure only admin and instructor can edit bookings.
     account_type = get_user_account_type()
-    if account_type == 'customer':
+    if account_type == 'student':
         return redirect(url_for('home'))
 
     if request.method == "POST":
@@ -289,7 +301,7 @@ def cancel_booking(booking_id):
 
     mongo.db.bookings.delete_one({"_id": ObjectId(booking_id)})
     flash('Booking Canceled!')
-    if account_type == "customer":
+    if account_type == "student":
         return redirect(url_for('view_bookings'))
 
     return redirect(url_for('booking_calendar'))
@@ -342,7 +354,9 @@ def edit_user(user_id):
 def search():
     if not is_user_logged_in():
         return redirect(url_for("login"))
-    
+    if get_user_account_type() != 'admin':
+        return redirect(url_for('home'))
+
     query = request.form.get("query")
     users = list(mongo.db.users.find({"$text": {"$search": query}}))
     return render_template("user_manager.html", users=users, account_type=get_user_account_type())
@@ -353,7 +367,7 @@ def search():
 def search_booking():
     if not is_user_logged_in():
         return redirect(url_for("login"))
-    if get_user_account_type() == 'customer':
+    if get_user_account_type() == 'student':
         return redirect(url_for('home'))
 
     username = session['user']
