@@ -39,12 +39,14 @@
         <!-- top navbar -->
         <nav class="nav-extended grey darken-1">
             <div class="nav-wrapper">
-                <img id="nav-logo" src="https://blog.passmefast.co.uk/images/l-plate-300x300.png">
-                <a href="{{ url_for('home') }}" class="brand-logo hide-on-small-only">Driving Lesson Booking</a>
-                <a href="{{ url_for('home') }}" class="brand-logo hide-on-med-and-up">DLB</a>
+                <a href="{{ url_for('home') }}" class="brand-logo left "><img id="nav-logo" src="https://blog.passmefast.co.uk/images/l-plate-300x300.png">
+                    <span class='hide-on-med-and-down'>Driving Lesson Booking</span></a>
+                <a href="{{ url_for('home') }}" class="brand-logo hide-on-large-only">DLB</a>
+
                 <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
                 <ul class="right hide-on-med-and-down">
                     <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('instructors') }}">Our Instructors</a></li>
                     {% if session.user %}
                     <li><a href="{{ url_for('book_lesson') }}">Book a Lesson</a></li>
                     <li><a href="{{ url_for('view_bookings') }}">My Bookings</a></li>
@@ -71,6 +73,7 @@
                 <h4 class="center-align light-blue-text text-darken 4">Driving Lesson Booking</h4>
             </li>
             <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('instructors') }}">Our Instructors</a></li>
             {% if session.user %}
             <li><a href="{{ url_for('book_lesson') }}">Book a Lesson</a></li>
             <li><a href="{{ url_for('view_bookings') }}">My Bookings</a></li>

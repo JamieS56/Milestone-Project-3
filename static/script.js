@@ -35,30 +35,27 @@ $(document).ready(function () {
     $('.time-selector').focus(function(){
         instructor = $(this).parentsUntil($('form')).find($('.instructor-username')).val()
         date = $(this).parentsUntil($('form')).find($('.datepicker')).val()
-    
          getAvailableSlots(instructor, date)
     })
 
     async function getAvailableSlots(instructor, date) {
-        console.log(instructor)
-        console.log(date)
 
         response = await fetch(`/get_available_slots?date=${date}&instructor=${instructor.toLowerCase()}`) // Here the python function is being called with the date and instructor variables.
-        response.json().then(data => {     
+        response.json().then(data => {     // Here the data gets turned into json so that it can read the available time slots and add it to the html.
             slots = data.slots  
             let timeSlotsHTML = ''
             $('.time-slot').remove()
             for (slot in slots) {
                 if (slots[slot] == 'fully booked'){
-                    timeSlotsHTML += `<option class="time-slot" value="" disabled>${slots[slot]}</option>`
+                    timeSlotsHTML += `<option class="time-slot" value="" disabled>${slots[slot]}</option>`  // if the day is fully booked it willl return a disabled option telling the user it's fully booked.
                 }else{
                     timeSlotsHTML += `<option class="time-slot" value="${slots[slot]}">${slots[slot]}</option>`
                 }
 
             }
-            console.log(timeSlotsHTML) // finally this is where the html gets injected into the time-selector input ready for the user to select.
-            $('.disabled-select').after(timeSlotsHTML)
-                    // Here the data gets turned into json so that it can read the available time slots and add it to the html.
+
+            $('.disabled-select').after(timeSlotsHTML)  // finally this is where the html gets injected into the time-selector input ready for the user to select.
+                    
         })
     }
 

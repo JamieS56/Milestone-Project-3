@@ -368,6 +368,19 @@ def search_booking():
     return render_template("booking_calendar.html", bookings=bookings, account_type=get_user_account_type())
 
 
+@app.route("/instructors")
+def instructors():
+    if is_user_logged_in():
+        account_type = get_user_account_type()
+    else:
+        account_type = NEW_USER_ACCOUNT_TYPE
+
+    instructors = list(mongo.db.users.find({"account_type": "instructor"}))
+
+    return render_template('instructors.html', account_type=account_type, instructors=instructors)
+
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html', e=e)
