@@ -29,11 +29,16 @@ $(document).ready(function () {
 
     // This is the code that injects the time slots into the booking form, suggested by my mentor Akshat Garg.
     $('.refresh-time-slots').click(function(){
-        getAvailableSlots($("#instructor-selector").val(), $('#lesson-booking-date-picker').val())
+        response = getAvailableSlots($("#instructor-selector").val(), $('#lesson-booking-date-picker').val())
+        response.then(html =>{
+            console.log(html)
+            $('#time-selector').html(html)
+        })
+        
     })
 
-    $('#time-selector').focus(function(){
-        getAvailableSlots($("#instructor-username").text(), document.getElementById('lesson-booking-date-picker-edit').value)
+    $('.time-selector').focus(function(){
+        html = getAvailableSlots($("#instructor-username").text(), $(".datepicker:visible").value)
     })
 
     async function getAvailableSlots(instructor, date) {
@@ -43,13 +48,12 @@ $(document).ready(function () {
         response = await fetch(`/get_available_slots?date=${date}&instructor=${instructor.toLowerCase()}`) // Here the python function is being called with the date and instructor variables.
         response.json().then(data => {      
             slots = data.slots            // Here the data gets turned into json so that it can read the available time slots and add it to the html.
-            let timeSlotsHTML = document.getElementById('disabled-select').outerHTML;
+            let timeSlotsHTML = $('#disabled-select').outerHTML;
             for (slot in slots) {
-                console.log(timeSlotsHTML)
                 timeSlotsHTML += `<option value="${slots[slot]}">${slots[slot]}</option>`
             }
-
-            document.getElementById('time-selector').innerHTML = timeSlotsHTML;  // finally this is where the html gets injected into the time-selector input ready for the user to select.
+            console.log(timeSlotsHTML) // finally this is where the html gets injected into the time-selector input ready for the user to select.
+            return timeSlotsHTML
         })
     }
 

@@ -11,7 +11,7 @@
                 <label for="query">Search Booking</label>
             </div>
             <div class="col s12 m4">
-                <a href="{{ url_for('booking_calender') }}" class="red btn text-shadow">Reset</a>
+                <a href="{{ url_for('booking_calendar') }}" class="red btn text-shadow">Reset</a>
                 <button type="submit" class="light-blue darken-1 btn text-shadow">Search</button>
             </div>
         </div>
@@ -47,7 +47,7 @@
     <div class="modal-content">
         <h4>Edit Booking</h4>
         <form method="POST" action="{{ url_for('edit_booking', booking_id=booking._id) }}">
-            <input value="{{ booking._id }}" class='hide' disabled>
+            <input value="{{ booking._id }}" class="hide" disabled>
             <div class="row">
                 <div class="col s12 edit-booking-modal-input">
                     <label  class='left' for='date'>Date</label>
@@ -59,7 +59,7 @@
                 </div>
                 <div class="col s12 edit-booking-modal-input">
                     <label id='time-picker-label' class='left' for='time_slot'>Time</label>
-                    <select id="time-selector" class="browser-default filled-in required validate" name="time_slot" required>
+                    <select id="time-selector" class="browser-default filled-in time-selector time-selector-edit required validate" name="time_slot" required>
                         <option id='disabled-select' value="{{ booking.time_slot }}" selected>{{ booking.time_slot }}</option>
                     </select>
                 </div>
@@ -74,7 +74,7 @@
     </div>
     <div class="modal-footer">
         <button type='submit' class="modal-close waves-effect light-blue darken-4 waves-light btn-small">Update</button>
-        <a href="" class="modal-close waves-effect waves-light light-blue btn-small">Close</a>
+        <a class="modal-close waves-effect waves-light light-blue btn-small">Close</a>
     </div>
     </form>
 </div>
@@ -88,7 +88,7 @@
     <div class="modal-footer">
         <a href="{{ url_for('cancel_booking', booking_id=booking._id) }}"
             class="modal-close waves-effect red waves-light btn-small">Cancel</a>
-        <a href="" class="modal-close waves-effect waves-light light-blue btn-small">Close</a>
+        <a class="modal-close waves-effect waves-light light-blue btn-small">Close</a>
     </div>
 </div>
 {% endfor %}
