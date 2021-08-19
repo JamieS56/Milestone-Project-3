@@ -47,11 +47,13 @@
     <div class="modal-content">
         <h4>Edit Booking</h4>
         <form method="POST" action="{{ url_for('edit_booking', booking_id=booking._id) }}">
-            <input value="{{ booking._id }}" class="hide" disabled>
-            <div class="row">
+
+            <div class="row edit-input-row">
+                <input value="{{ booking._id }}" class="hide" disabled>
+                <input value="{{ booking.instructor }}" class="hide instructor-username" >
                 <div class="col s12 edit-booking-modal-input">
-                    <label  class='left' for='date'>Date</label>
-                    <div id='date-picker-div' class="">
+                    <label class='left' for='date'>Date</label>
+                    <div id='date-picker-div'>
                         <input id="lesson-booking-date-picker-edit" value="{{ booking.date }}" name='date' type="text"
                             class="datepicker required validate" placeholder="choose a day" required>
                     </div>
@@ -59,13 +61,17 @@
                 </div>
                 <div class="col s12 edit-booking-modal-input">
                     <label id='time-picker-label' class='left' for='time_slot'>Time</label>
-                    <select id="time-selector" class="browser-default filled-in time-selector time-selector-edit required validate" name="time_slot" required>
-                        <option id='disabled-select' value="{{ booking.time_slot }}" selected>{{ booking.time_slot }}</option>
+                    <select id="time-selector"
+                        class="browser-default filled-in time-selector time-selector-edit required validate"
+                        name="time_slot" required>
+                        <option id='disabled-select' class='disabled-select' value="{{ booking.time_slot }}"  disabled selected>{{ booking.time_slot }}
+                        </option>
                     </select>
                 </div>
                 <div class="col s12 edit-booking-modal-input">
                     <label class='left' for='optional_details'>Optional Details</label>
-                    <input value="{{ booking.optional_details }}" id="optional_details" name='optional_details' type="text" class="">
+                    <input value="{{ booking.optional_details }}" id="optional_details" name='optional_details'
+                        type="text" class="">
                 </div>
             </div>
 

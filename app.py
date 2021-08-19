@@ -203,7 +203,7 @@ def get_available_slots():
     if len(booked_slots) < len(available_slots):  # This is removing the booked times from the all times list which will then get sent to Driving lesson times
         available_slots = [item for item in available_slots if item not in booked_slots]
     else:
-        flash('Fully Booked')    # if all times are booked it will return fully booked.
+        return jsonify({"slots": ['fully booked']})   # if all times are booked it will return fully booked.
 
     return jsonify({"slots": available_slots})
 

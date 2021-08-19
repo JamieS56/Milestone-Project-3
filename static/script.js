@@ -29,16 +29,14 @@ $(document).ready(function () {
 
     // This is the code that injects the time slots into the booking form, suggested by my mentor Akshat Garg.
     $('.refresh-time-slots').click(function(){
-        response = getAvailableSlots($("#instructor-selector").val(), $('#lesson-booking-date-picker').val())
-        response.then(html =>{
-            console.log(html)
-            $('#time-selector').html(html)
-        })
-        
+        getAvailableSlots($("#instructor-selector").val(), $('#lesson-booking-date-picker').val())
     })
 
     $('.time-selector').focus(function(){
-        html = getAvailableSlots($("#instructor-username").text(), $(".datepicker:visible").value)
+        instructor = $(this).parentsUntil($('form')).find($('.instructor-username')).val()
+        date = $(this).parentsUntil($('form')).find($('.datepicker')).val()
+    
+         getAvailableSlots(instructor, date)
     })
 
     async function getAvailableSlots(instructor, date) {
@@ -46,14 +44,21 @@ $(document).ready(function () {
         console.log(date)
 
         response = await fetch(`/get_available_slots?date=${date}&instructor=${instructor.toLowerCase()}`) // Here the python function is being called with the date and instructor variables.
-        response.json().then(data => {      
-            slots = data.slots            // Here the data gets turned into json so that it can read the available time slots and add it to the html.
-            let timeSlotsHTML = $('#disabled-select').outerHTML;
+        response.json().then(data => {     
+            slots = data.slots  
+            let timeSlotsHTML = ''
+            $('.time-slot').remove()
             for (slot in slots) {
-                timeSlotsHTML += `<option value="${slots[slot]}">${slots[slot]}</option>`
+                if (slots[slot] == 'fully booked'){
+                    timeSlotsHTML += `<option class="time-slot" value="" disabled>${slots[slot]}</option>`
+                }else{
+                    timeSlotsHTML += `<option class="time-slot" value="${slots[slot]}">${slots[slot]}</option>`
+                }
+
             }
             console.log(timeSlotsHTML) // finally this is where the html gets injected into the time-selector input ready for the user to select.
-            return timeSlotsHTML
+            $('.disabled-select').after(timeSlotsHTML)
+                    // Here the data gets turned into json so that it can read the available time slots and add it to the html.
         })
     }
 
