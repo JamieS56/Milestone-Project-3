@@ -4,7 +4,7 @@ from flask import (
     redirect, jsonify, request, session, url_for)
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
-from datetime import date
+from datetime import date, datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.exceptions import HTTPException
 if os.path.exists("env.py"):
@@ -168,7 +168,7 @@ def book_lesson():
         booking = {
             'instructor': request.form.get("instructor").lower(),
             'student': session['user'],
-            'date': request.form.get("date"),
+            'date': datetime.strptime(request.form.get("date"), "%d/%m/%Y"),
             'time_slot': request.form.get('time_slot'),
             'optional_details': request.form.get('optional_details')
           }
@@ -186,7 +186,7 @@ def get_available_slots():
         return redirect(url_for("login"))
     # this is the data that is required to find the correct booked slots.
     booking = {
-      'date': request.args.get("date", ""),
+      'date': datetime.strptime(request.args.get("date", ""), "%d/%m/%Y"),
       "instructor": request.args.get("instructor", "")
     }
 
@@ -215,12 +215,14 @@ def view_bookings():
         return redirect(url_for("login"))
 
     username = session["user"]
-    bookings = list(mongo.db.bookings.find({'student': username}))      # Finds all bookings under the students name
+    bookings = list(mongo.db.bookings.find({'student': username}).sort('date'))  # Finds all bookings under the students name
 
     # Changes the instructors username to there actual name when users view there booked lessons.
     for booking in bookings:
+        booking['date'] = date_format(booking["date"])
         instructor = mongo.db.users.find_one({'username': booking["instructor"]}, {'first_name': 1, 'last_name': 1})
-        booking['instructor_name'] = instructor['first_name'] + ' ' + instructor['last_name']
+        booking['instructor_first_name'] = instructor['first_name'] 
+        booking["instructor_last_name"] =  instructor['last_name']
 
     return render_template("view_bookings.html", username=username, bookings=bookings, account_type=get_user_account_type())
 
@@ -228,36 +230,53 @@ def view_bookings():
 # booking calendar page, only for instructors
 @app.route("/booking/calendar", methods=["GET"])
 def booking_calendar():
+
     if not is_user_logged_in():
         return redirect(url_for("login"))
+
     account_type = get_user_account_type()
+
     if account_type == 'instructor' or account_type == 'admin':
-        
         username = session["user"]
         user_account_type = get_user_account_type()
         users = get_users()
         bookings = []
         # shows all booked lessons for the instructor that is logged in or if an admin is logged in they can see all the bookings.
         if user_account_type == 'admin':
-            bookings = list(mongo.db.bookings.find())
+            bookings = list(mongo.db.bookings.find().sort('date'))
+            
             for booking in bookings:
+                print(booking['date'])
+                booking['date'] = date_format(booking["date"])
                 for user in users:
                     if user['username'] == booking['student']:
                         booking['student_phone'] = user['phone_number']
                         booking['student_email'] = user['email']
-
+                        booking['student_first_name'] = user['first_name']
+                        booking['student_last_name'] = user['last_name']
         else:
-            bookings = list(mongo.db.bookings.find({'instructor': username}))
+            bookings = list(mongo.db.bookings.find({'instructor': username}).sort('date'))
             for booking in bookings:
+                booking['date'] = date_format(booking["date"])
                 for user in users:
                     if user['username'] == booking['student']:
                         booking['student_phone'] = user['phone_number']
                         booking['student_email'] = user['email']
+                        booking['student_first_name'] = user['first_name']
+                        booking['student_last_name'] = user['last_name']
 
         return render_template("booking_calendar.html", username=username, bookings=bookings, account_type=get_user_account_type())
 
     else:
         return redirect(url_for('home'))
+
+
+def date_format(e):
+    year = e.strftime("%Y")
+    month = e.strftime("%m")
+    day = e.strftime("%d")
+    new_date = "{}/{}/{}".format(day, month, year)
+    return new_date
 
 
 @app.route("/booking/<booking_id>/edit", methods=["GET", "POST"])
@@ -269,14 +288,26 @@ def edit_booking(booking_id):
     if account_type == 'student':
         return redirect(url_for('home'))
 
+    username = session["user"]
+
     if request.method == "POST":
+        flash_msg = ""
+        if request.form.get('time_slot') is None:
+            flash_msg = 'please choose a time slot'
+        elif request.form.get("date") == '':
+            flash_msg = 'please fill in date'
+
+        if flash_msg:
+            flash(flash_msg)
+            return redirect(url_for('booking_calendar'))
+
         try:
             current_booking = mongo.db.bookings.find_one({"_id": ObjectId(booking_id)})
 
             booking = {
                 'instructor': current_booking['instructor'],
                 'student': current_booking['student'],
-                'date': request.form.get("date"),
+                'date': datetime.strptime(request.form.get("date"), "%d/%m/%Y"),
                 'time_slot': request.form.get('time_slot'),
                 'optional_details': request.form.get('optional_details')
             }

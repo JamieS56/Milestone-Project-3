@@ -13,8 +13,8 @@
     <div class="col s12 m8">
       <div class="card blue-grey darken-1">
         <div class="card-content white-text left-align">
-          <span class="card-title"><strong>{{ booking.instructor|capitalize }}</strong> : {{ booking.date }}</span>
-          <strong>Instructor: {{ booking.instructor|capitalize }}</strong>
+          <span class="card-title"><strong>{{ booking.instructor_first_name |capitalize }} {{ booking.instructor_last_name |capitalize }}</strong> : {{ booking.date }}</span>
+          <strong>Instructor: {{ booking.instructor_first_name |capitalize }} {{ booking.instructor_last_name |capitalize }}</strong>
           <p>Date: {{ booking.date }}</p>
           <p>Time: {{ booking.time_slot }}</p>
           <p>Details: {{ booking.optional_details }}</p>
