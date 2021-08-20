@@ -28,7 +28,7 @@ The goal of DLB is to make the act of booking a driving lesson as quick and simp
     The three colors I'm going to use are red, white and grey as these are the colors on 'L plates' that learner drivers have and grey is a professional looking color for the nav bar and footer and works well with the red and white.
 
 * Typography:
-     
+     I have used Ubunto and Roboto because they look good together and fit the style of being professional and sleek.
 
 * Images:
     I'm going to put a hero image of a learner driver and their car on the home page to instantly show visiting users what this website is about.
@@ -91,7 +91,50 @@ Edit popup is just a simple form but in the final version you can't change the n
 The user manager is an admin only page where they can set account types and eddit user infor, so that needed to be as easy as possible. Users are in collapsibles because there is too much data to fit on a card to look nice and not cluster up the page. so when you click on the wanted user it brings up an edditable form for the admin to change and update. In the final version the edit button makes the form editable otherwise you can only read it to stop mistakes being made, then the submit button writes it to the db.
 
 
+### Data Structure
 
+In DLB there's going to be two main data bases 'Users' and 'Bookings'. The users data base will contain the needed info about all the users of the app. The bookings data base will contain info about the bookings students make.
+
+#### Users record example:
+
+```
+    _id : 611eb96a9ad0e87680f9fb27
+    username : "mike1342"
+    password : "pbkdf2:sha256:260000$x0rcGlXfJvGITwuB$537b31a0f5d094eb0550af184fb67083..."
+    account_type : "instructor"
+    first_name : "Mike"
+    last_name : "Hammond"
+    phone_number : "51464618238"
+    email : "mike@gmail.com"
+```
+
+In the user record thers just basic info about them so that they can log in and have an account, contact info, names and ID.
+* ID is guarantees it's a unique record and a good way to query a record.
+* Username and password so they can login.
+* Name so that I can personalize their experience of the app for the user.
+* Contact info incase users needed to be contacted.
+
+
+#### Bookings record example:
+
+```
+    _id : 611eb96a9a32ed0e80f9fb27
+    instructor : "mike1342"
+    student : "james"
+    date : 2021-08-26T00:00:00.000+00:00
+    time_slot : "15:00-16:00"
+    optional_details : "Collect at home."
+    lesson_completed : false
+```
+
+* The booking info has details about the booking and also data to help the proccessing of the booking.
+* ID is guarantees it's a unique record and is a good way to query the record.
+* The instructor so that the student knows whi there having a lesson with.
+* Student is so that the instructor knows who there teaching.
+* The date of the lesson so they know when the lesson is.
+* The time of the lesson.
+* Optional details the student might want to tell the instructor like where to be picked up.
+* And if the lesson has been completed which tirns to true the day after the lesson and is used for sorting the bookings.
 
 ## Features
 
@@ -300,7 +343,7 @@ Restriction code:
 
 #### Light house testing:
 
-Theese are the results of the tests 
+These are the results of the tests.
 
 ![Home lighthouse test](assets/lighthouse_testing/home_lighthouse.png)
 ![View Bookings lighthouse test](assets/lighthouse_testing/view_bookings_lighhouse.png)
@@ -312,9 +355,39 @@ Theese are the results of the tests
 #### Code Validatorsalidators
 
 * [PEP8 Python](http://pep8online.com/checkresult#)
+
+![Python validation check](assets/validation/python_validation.png)
+
+The only errors in the python file were line too long errors.
+
+
 * [W3C CSS](https://jigsaw.w3.org/css-validator/validator)
+
+![CSS validation check](assets/validation/CSS_validation.png)
+
+No errors in the CSS file.
+
+
 * [jshint JS](https://jshint.com/)
+
+![JS validation check](assets/validation/js_validation.png)
+
+No errors in js file.
+
+
 * [jshint JS(stepper code)](https://jshint.com/)
+
+![JS Stepper validation check](assets/validation/stepper_js_validation.png)
+
+No errors in js stepper file.
+
+
+* [W3 validator](https://validator.w3.org/nu/?doc=http%3A%2F%2Fbook-driving-lessons.herokuapp.com%2Fhome)
+
+![HTML validation check](assets/validation/html_validation.png)
+
+No errors in html validation.
+
 
 ## Deployment
 
@@ -344,6 +417,17 @@ This is how I deployed my project to Github and Heroku
 
 12. Now it automatically updates when we push to github.
 
+
+## Making a Local Clone:
+
+1. Log in to GitHub and locate the GitHub Repository
+2. Under the repository name, click "Clone or download".
+3. To clone the repository using HTTPS, under "Clone with HTTPS", copy the link.
+4. Open Git Bash
+5. Change the current working directory to the location where you want the cloned directory to be made.
+6. Type git clone, and then paste the URL you copied in Step 3.
+7. $ git clone https://github.com/JamieS56/Milestone-Project-3.git
+8. Press Enter. Your local clone will be created.
 
 
 ### Note:
