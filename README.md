@@ -4,13 +4,14 @@
 
 The goal of DLB is to make the act of booking a driving lesson as quick and simple for everyone involved and provide a diary of all booked lessons for students and instructors.
 
+
 ## User Stories
+
 ### Instrucor Goals:
  
 * As an instructor I want to be able to look up and easily view what lessons I have and when.
 * I want to know how to contact my students incase of any changes in bookings.
 * I want to be able to delete bookings and personalize my available time slots.
-
 
 ### Customer Goals:
 
@@ -23,12 +24,13 @@ The goal of DLB is to make the act of booking a driving lesson as quick and simp
 * An application where you can easily manage the users on it.
 * A good looking app that looks clean and professional across all devices.
 
+
 ## UX
 
 ### Design
 
 * Color scheme:
-    The three colors I'm going to use are red, white and grey as these are the colors on 'L plates' that learner drivers have and grey is a professional looking color for the nav bar and footer and works well with the red and white.
+    The three main colors I'm going to use are red, white and grey as these are the colors on 'L plates' that learner drivers have and grey is a professional looking color for the nav bar and footer and works well with the red and white. I will also use some blues for the user Management system as it is admin only and seperates it from the rest of the content.
 
 * Typography:
      I have used Ubunto and Roboto because they look good together and fit the style of being professional and sleek.
@@ -41,64 +43,64 @@ The goal of DLB is to make the act of booking a driving lesson as quick and simp
 ### Wireframes
 
 
-#### Home
+### Home
 
 ![Home Desktop Wirerame](assets/read_me_img/home_desktop_wireframe.png)
 
-On the home page I wanted the user to instantly know what the app did, so this is why there is a book lesson button a description of what Driving Lesson Booking is. in the final version i also added a big picture of a learner driver to help do this. The login and book buttons are in the middle of the page as theese are the two most important  buttons and what we want the users to do most. There are also review cards to convince the user even more to use our service.
+On the home page I wanted the user to instantly know what the app did, so this is why there is a book lesson button and a description of what Driving Lesson Booking is as soon as you open the home page. In the final version I also added a big picture of a learner driver to maximise this. The login and book buttons are in the middle of the page as these are the two most important  buttons and what we want the users to do most. There are also review cards to convince the user even more to use our service.
 
 ![Home Mobile Wirerame](assets/read_me_img/home_mobile_wireframe.png)
 
-On mobile it is similar but the nav bar is now a side menu trigered by the burger button and the review cards are stacked ontop of each other. In the final version the hero image is stacked ontop of the main text.
+On mobile it is similar but the nav bar is now a side menu trigered by the burger button and the review cards are stacked ontop of each other. In the final version the hero image is stacked ontop of the main text. This makes the wholee page easier to read for the user.
 
-#### Book Lesson
+### Book Lesson
 
 ![Book Lesson Desktop Wireframe](assets/read_me_img/book_lesson_desktop_wireframe.png)
 
-The booked lesson page is the page that has followed the wire frame the least but it still follows the same idea of keeping the entire booking process on the same page and making it clear and obviouse for the user. Instead of having the calender imbeded in the page. it's a popup in a stepper. the final product looks very clean and not cluttering the page like this wireframe has. 
+The booked lesson page is the page that has followed the wire frame the least but it still follows the same idea of keeping the entire booking process on the same page and making it clear and obviouse for the user how to book a lesson. Instead of having the calender being imbeded in the page, it's now a popup in a stepper. The final page looks very clean and the page doesn't look cluttered which helps the user know what to do. 
 
 ![Book Lesson Mobile Wireframe](assets/read_me_img/book_lesson_mobile_wireframe.png)
 
 The wireframe places everything vertically which is what the final version does, but because it's in a stepper it's all compact and you can easily switch between different steps in the booking process.
 
-#### Login
+### Login
 
 ![Login Wireframe](assets/read_me_img/login_wireframe.png)
 
 I wanted a standard login with a link to create an account if the user didn't have one because you just want the user to login as quickly as possible.
 
-#### Register
+### Register
 
 ![Register Wireframe](assets/read_me_img/register_wireframe.png)
 
 The register page has one purpose and that's to sign the user up so everything is on that one page and you click sign up and that's it. But it also has a link if the user already has an account.
 
-#### View Bookings
+### View Bookings
 
 ![View Bookings Wireframe](assets/read_me_img/view_booking_wireframe.png)
 
-The view bookings page is how the student views there bookings but can also cancel them. I originally was going to have the bookings in a colapsible but as ther not that much info in a booking the final version uses [Materialize cards](https://materializecss.com/cards.html) displaying the correct info.
+The view bookings page is how the student views there bookings but can also cancel them. I originally was going to have the bookings in a colapsible but as ther not that much info in a booking the final version uses [Materialize cards](https://materializecss.com/cards.html) displaying the correct info which makes the info more imediate to the user which is good.
 
-#### Booking Calendar
+### Booking Calendar
 
 ![Booking Calendar Wireframe](assets/read_me_img/booking_callender_wireframe.png)
 
-The booking calendar is for instructors to see who they have booked, so it shows there upcoming lessons in order, and also has an edit and cancel button for each booking incase they need to change things. There is also a search function at the top to search for specific bookings.
+The booking calendar is for instructors to see who they have booked, so it shows there upcoming lessons in order, and also has an edit and cancel button for each booking incase they need to change things. There is also a search function at the top to search for specific bookings. Lessons that have been completed appear at the bottom of the page as it is less likely that the user wants to look at them.
 
 ![Booking Calendar Edit Wireframe](assets/read_me_img/edit_booking_wireframe.png)
 
-Edit popup is just a simple form but in the final version you can't change the name of the student of the booking. And ther is also a cancel button in the final version if the user want's to stop editing.
+Edit popup is just a simple form but in the final version you can't change the name of the student of the booking, and there is also a cancel button in the final version if the user want's to stop editing.
 
 ![User Manager Wireframe](assets/read_me_img/user_manager_wireframe.png)
 
-The user manager is an admin only page where they can set account types and eddit user infor, so that needed to be as easy as possible. Users are in collapsibles because there is too much data to fit on a card to look nice and not cluster up the page. so when you click on the wanted user it brings up an edditable form for the admin to change and update. In the final version the edit button makes the form editable otherwise you can only read it to stop mistakes being made, then the submit button writes it to the db.
+The user manager is an admin only page where they can set account types and edit user info, so that needed to be as easy as possible. Users are in collapsibles because there is too much data to fit on a card and look nice so it doesn't cluster up the page. So when you click on the wanted user it brings up an editable form for the admin to change and update. In the final version the edit button makes the form editable otherwise you can only read it, this is to stop mistakes being made, then the submit button writes it to the db.
 
 
 ### Data Structure
 
 In DLB there's going to be two main data bases 'Users' and 'Bookings'. The users data base will contain the needed info about all the users of the app. The bookings data base will contain info about the bookings students make.
 
-#### Users record example:
+### Users record example:
 
 ```
     _id : 611eb96a9ad0e87680f9fb27
@@ -118,7 +120,7 @@ In the user record thers just basic info about them so that they can log in and 
 * Contact info incase users needed to be contacted.
 
 
-#### Bookings record example:
+### Bookings record example:
 
 ```
     _id : 611eb96a9a32ed0e80f9fb27
@@ -139,6 +141,7 @@ In the user record thers just basic info about them so that they can log in and 
 * Optional details the student might want to tell the instructor like where to be picked up.
 * And if the lesson has been completed which tirns to true the day after the lesson and is used for sorting the bookings.
 
+
 ## Features
 
 * Responsive on all devices
@@ -150,15 +153,16 @@ In the user record thers just basic info about them so that they can log in and 
 * Search booking and user features.
 * An instructor contact page.
 
-### Future features
+### Future features:
 
 * Instructors being able to customize what time slots are available to be booked for them.
-* Search by dat ion the booking calender page.
+* Search by date on the booking calendar page.
+* The ability for instructors to upload a picture of themselves so that it appears next to the contact info about them.
 
 
 ## Technologies Used
 
-### Languages Used
+### Languages Used"
 
 * HTML
 * CSS
@@ -220,7 +224,9 @@ In the user record thers just basic info about them so that they can log in and 
 
 
 ### My Goals Testing:
+
 1. "An application where you can easily manage the users on it."
+
     I have a fully functioning user manager page where admins can search through the database of users and edit their profiles, excluding passwords, if needed and change account types. For easy use there is a search feature where you can search users by first name, last name and username.
 
 2. "A good looking app that looks nice on both desktop and mobile."
@@ -229,45 +235,44 @@ In the user record thers just basic info about them so that they can log in and 
     I also have used a Materialize stepper which was created by [Floris List](https://codepen.io/flist) which I found on [code pen](https://codepen.io/flist/pen/mqXemY). It is just what I needed, which was a simple form layout which looks great on all screen sizes and keeps you on the same page throughout the whole booking proccess. Originally I had split the booking across two pages so I could load the timeslots with a new page but because of the fetch function I could load in the data without refreshing the page.
 
 
-
 ### Testing web page
 
-#### Nav Bar and Links
+### Nav Bar and Links:
 
 All links in the footer redirect to the correct website on a new tab for the user to view our socials. All links within the website linking with other pages all work correctly and consistently plus correct links show up in the nav bar for who is logged in and there account type. They also all work correctly on mobile and because of the hidden side nav are easily accessibly and look good. 
 
-#### Booking Lessons
+### Booking Lessons:
 
 The booking lessons form works well all data is successfully written to the data base and if any of the required fields aren't filled in it will flash a message on screen and not write any data to the database. I would have used the required attribute like in the registration and login form but for some reason it didn't work probbably to do fith the code for the stepper but i'm not sure what part so this was my solution.
 
-#### Viewing bookings
+### Viewing bookings:
 
 Viewing bookings works well, you can only see the bookings you've booked and no one elses it looks neat and clean and you can cancel a booking if you want to and even has a warning popup to avoid unwanted cancelations.
 
-#### Booking callender
+### Booking callendar:
 
-The booking callender works well, the instructor can view all lessons that are booked to them, can cancel lessons, edit bookings and can even search through them by student or instructor.
+The booking callendar works well, the instructor can view all lessons that are booked to them, can cancel lessons, edit bookings and can even search through them by student or instructor.
 
-#### User Manager
+### User Manager:
 
 The user manager displays all accounts in collapsible elements which inturn let you edit the user. It flash's a message to the user if the booking is made succesfully.
 It displays all required information and looks good. Plus there is a search feauture that allows you to search through the accounts.
 
-#### Create account/ Login
+### Create account/ Login:
 
 Create account works, it uses the required attribute to force the user into filling out all the fields, it writes the new users details to the databse and hashes the password correctly using `generate_password_hash()` so it is unreadable to someone looking at the database.
 
-#### Instructors Page:
+### Instructors Page:
 
 The Instructors page was a late addition as I thought it was a better way for people to be able to contact the instructors than the info appearing on the booking. All it does is loop through the list of instructors passed into the page and display there contact info. In the future i could possibly add a feature which allows the instructor to upload a picture of themselves and then display it next to their info.
 
-#### Responsive design
+### Responsive design:
 
 All pages are designed to look good across all devices using materializes grid system which allows elements to change size and position based on screen size
 
-#### Error Pages/ handling:
+### Error Pages/ handling:
 
-To handle errors I used [pythonprogramming.net](https://pythonprogramming.net/flask-error-handling-basics/) to help me out. I created a 404.html page and 500.html page
+To handle errors I used [pythonprogramming.net's](https://pythonprogramming.net/flask-error-handling-basics/) video to help me out. I created a 404.html page and 500.html page
 to link to if an error occured with a very basic message on each and links back to the other pages. The 404 page just says page not found but the 500 page gives a little description of the type of error that occured. Also before each page loads a check is made to see if the user is logged in and the correct account type is logged in to view the page so people can't manually type in restricted pages.
 
 Restriction code:
@@ -349,7 +354,7 @@ Restriction code:
     This function will take in a list of the bookings that has been sorted by date already by using `.sort('date')` it then checks the bookings if `'lesson_completed' == True` on the booking and adds it to the completed_lessons list and removes it from the bookings list. At first i was having trouble as when you remove something from a list it resets the position of all the bookings in the list meening it would skip over every other booking and not check if it was completed. luckily I found the solution on [this Stack Overflow page](https://stackoverflow.com/questions/14267722/python-list-remove-skips-next-element-in-list) saying that if you used `reversed()` you can skip over this problem because you start itterating from the end so any bookings that are left to be changed don't change list position.
 
 
-#### Light house testing:
+### Light house testing:
 
 These are the results of the tests.
 
@@ -360,7 +365,7 @@ These are the results of the tests.
 ![User Manager lighthouse test](assets/lighthouse_testing/user_manager_lighthouse.png)
 ![Instructors page lighthouse test](assets/lighthouse_testing/instructors_lighthouse.png)
 
-#### Code Validators
+### Code Validators
 
 * [PEP8 Python](http://pep8online.com/checkresult#)
 
