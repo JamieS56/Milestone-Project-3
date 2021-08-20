@@ -1,5 +1,7 @@
 # Driving Lesson Booking
 
+![ Mockup of the website across all devices](assets/mock-up.png)
+
 The goal of DLB is to make the act of booking a driving lesson as quick and simple for everyone involved and provide a diary of all booked lessons for students and instructors.
 
 ## User Stories
@@ -21,8 +23,9 @@ The goal of DLB is to make the act of booking a driving lesson as quick and simp
 * An application where you can easily manage the users on it.
 * A good looking app that looks clean and professional across all devices.
 
+## UX
 
-## Design
+### Design
 
 * Color scheme:
     The three colors I'm going to use are red, white and grey as these are the colors on 'L plates' that learner drivers have and grey is a professional looking color for the nav bar and footer and works well with the red and white.
@@ -35,10 +38,10 @@ The goal of DLB is to make the act of booking a driving lesson as quick and simp
     Plus I will have the logo at the top of the nav bar on each page.
 
 
-## Wireframes
+### Wireframes
 
 
-### Home
+#### Home
 
 ![Home Desktop Wirerame](assets/read_me_img/home_desktop_wireframe.png)
 
@@ -48,7 +51,7 @@ On the home page I wanted the user to instantly know what the app did, so this i
 
 On mobile it is similar but the nav bar is now a side menu trigered by the burger button and the review cards are stacked ontop of each other. In the final version the hero image is stacked ontop of the main text.
 
-### Book Lesson
+#### Book Lesson
 
 ![Book Lesson Desktop Wireframe](assets/read_me_img/book_lesson_desktop_wireframe.png)
 
@@ -58,25 +61,25 @@ The booked lesson page is the page that has followed the wire frame the least bu
 
 The wireframe places everything vertically which is what the final version does, but because it's in a stepper it's all compact and you can easily switch between different steps in the booking process.
 
-### Login
+#### Login
 
 ![Login Wireframe](assets/read_me_img/login_wireframe.png)
 
 I wanted a standard login with a link to create an account if the user didn't have one because you just want the user to login as quickly as possible.
 
-### Register
+#### Register
 
 ![Register Wireframe](assets/read_me_img/register_wireframe.png)
 
 The register page has one purpose and that's to sign the user up so everything is on that one page and you click sign up and that's it. But it also has a link if the user already has an account.
 
-### View Bookings
+#### View Bookings
 
 ![View Bookings Wireframe](assets/read_me_img/view_booking_wireframe.png)
 
 The view bookings page is how the student views there bookings but can also cancel them. I originally was going to have the bookings in a colapsible but as ther not that much info in a booking the final version uses [Materialize cards](https://materializecss.com/cards.html) displaying the correct info.
 
-### Booking Calendar
+#### Booking Calendar
 
 ![Booking Calendar Wireframe](assets/read_me_img/booking_callender_wireframe.png)
 
@@ -147,6 +150,11 @@ In the user record thers just basic info about them so that they can log in and 
 * Search booking and user features.
 * An instructor contact page.
 
+### Future features
+
+* Instructors being able to customize what time slots are available to be booked for them.
+* Search by dat ion the booking calender page.
+
 
 ## Technologies Used
 
@@ -188,7 +196,7 @@ In the user record thers just basic info about them so that they can log in and 
 ### Instructor Goals Testing:
 1. "As an instructor I want to be able to look up and easily view what lessons I have and when."
 
-    All this will be available within the Booking Calendar Page which will show all lessons that the instructor has and can search by date and by student. For convenience the lessons will appear in date order so the instructor can see their next lesson.
+    All this will be available within the Booking Calendar Page which will show all lessons that the instructor has and can search by student. For convenience the lessons will appear in date order so the instructor can see their next lesson and lessons that have already happened appear at the bottom of the list.
 
 2. "I want to know how to contact my students incase of any changes in bookings."
 
@@ -238,12 +246,12 @@ Viewing bookings works well, you can only see the bookings you've booked and no 
 
 #### Booking callender
 
-The booking callender works well, the instructor can view all lessons that are booked to them, can cancel lessons, edit bookings and can even search through them by name and date.
+The booking callender works well, the instructor can view all lessons that are booked to them, can cancel lessons, edit bookings and can even search through them by student or instructor.
 
 #### User Manager
 
 The user manager displays all accounts in collapsible elements which inturn let you edit the user. It flash's a message to the user if the booking is made succesfully.
-It displays all required information and looks good. Plus there is a search feauturre that allows you to search through the accounts.
+It displays all required information and looks good. Plus there is a search feauture that allows you to search through the accounts.
 
 #### Create account/ Login
 
@@ -352,7 +360,7 @@ These are the results of the tests.
 ![User Manager lighthouse test](assets/lighthouse_testing/user_manager_lighthouse.png)
 ![Instructors page lighthouse test](assets/lighthouse_testing/instructors_lighthouse.png)
 
-#### Code Validatorsalidators
+#### Code Validators
 
 * [PEP8 Python](http://pep8online.com/checkresult#)
 
@@ -418,7 +426,7 @@ This is how I deployed my project to Github and Heroku
 12. Now it automatically updates when we push to github.
 
 
-## Making a Local Clone:
+### Making a Local Clone:
 
 1. Log in to GitHub and locate the GitHub Repository
 2. Under the repository name, click "Clone or download".
@@ -430,7 +438,7 @@ This is how I deployed my project to Github and Heroku
 8. Press Enter. Your local clone will be created.
 
 
-### Note:
+## Notes:
 
 At the start of my project I was pushing straight to Heroku using the cli commands 
 
@@ -445,7 +453,7 @@ This meant that I was not saving to github and not saving my commit messages eit
 
 
 
-
+## Acknowledgements/ Links
 
 ## Photos links
 
@@ -465,3 +473,8 @@ This meant that I was not saving to github and not saving my commit messages eit
     * [Flask](https://flask.palletsprojects.com/en/2.0.x/) - If I had anything that I was stuck on in my app.py file I usually referred to this.
     * [Jinja](https://jinja.palletsprojects.com/en/3.0.x/) - I used Jinja docs to help set up templates and more specifically filtering within the templates.
     * [Materialize](https://materializecss.com/) - Materialize was what I used to style the whole app so if I had any problems styling I used their official docs.
+
+
+# General Help
+
+My mentor Akshat Garg helped me throughout the project.

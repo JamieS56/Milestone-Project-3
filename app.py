@@ -383,7 +383,8 @@ def edit_user(user_id):
             # Finds which user there edditing
             current_user = mongo.db.users.find_one(
                 {"_id": ObjectId(user_id)})
-            # The eddited data
+            # The edited data
+            print(request.form.get("account_type"))
             submit = {
                 "username": request.form.get("username").lower(),
                 'password': current_user['password'],
