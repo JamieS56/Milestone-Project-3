@@ -1,141 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.js"
-        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-        <script
-        src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
-        integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
-        crossorigin="anonymous"></script>
+        {% block header %} {% endblock %}
 
-    {% block header %}
-    {% endblock %}
+        <!-- Materialize cdn links -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-    <!-- Materialize cdn links -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Ubuntu&display=swap" rel="stylesheet" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Ubuntu&display=swap" rel="stylesheet">
+        <script src="../static/script.js"></script>
+        <link rel="stylesheet" href="../static/style.css" />
 
-    <script src="../static/script.js"></script>
-    <link rel="stylesheet" href="../static/style.css">
+        <title>DLB</title>
+    </head>
 
-    <title>DLB</title>
-</head>
+    <body>
+        <header>
+            <!-- navbar taken from materialize and using the jinja from the Task Managaer Project to set the navbar depending on who is logged in.-->
+            <!-- top navbar -->
+            <nav class="nav-extended grey darken-1">
+                <div class="nav-wrapper">
+                    <a href="{{ url_for('home') }}" class="brand-logo left"><img id="nav-logo" alt="Learners L Sticker" src="https://blog.passmefast.co.uk/images/l-plate-300x300.png" /> <span class="hide-on-med-and-down">Driving Lesson Booking</span></a>
+                    <a href="{{ url_for('home') }}" class="brand-logo hide-on-large-only">DLB</a>
 
-<body>
-    <header>
-        <!-- navbar taken from materialize and using the jinja from the Task Managaer Project to set the navbar depending on who is logged in.-->
-        <!-- top navbar -->
-        <nav class="nav-extended grey darken-1">
-            <div class="nav-wrapper">
-                <a href="{{ url_for('home') }}" class="brand-logo left "><img id="nav-logo" src="https://blog.passmefast.co.uk/images/l-plate-300x300.png">
-                    <span class='hide-on-med-and-down'>Driving Lesson Booking</span></a>
-                <a href="{{ url_for('home') }}" class="brand-logo hide-on-large-only">DLB</a>
+                    <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
+                    <ul class="right hide-on-med-and-down">
+                        <li><a href="{{ url_for('home') }}">Home</a></li>
 
-                <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
-                <ul class="right hide-on-med-and-down">
-                    <li><a href="{{ url_for('home') }}">Home</a></li>
-                    
-                    {% if session.user %}
+                        {% if session.user %}
                         <li><a href="{{ url_for('book_lesson') }}">Book a Lesson</a></li>
                         <li><a href="{{ url_for('view_bookings') }}">My Bookings</a></li>
                         {% if account_type == "instructor"%}
-                            <li><a href="{{ url_for('booking_calendar') }}">Booking Calendar</a></li>
+                        <li><a href="{{ url_for('booking_calendar') }}">Booking Calendar</a></li>
+                        {% endif %} {% if account_type == "admin" %}
+                        <li><a href="{{ url_for('booking_calendar') }}">Booking Calendar</a></li>
+                        <li><a href="{{ url_for('user_manager') }}">User Manager</a></li>
                         {% endif %}
-                        {% if account_type == "admin" %}
-                            <li><a href="{{ url_for('booking_calendar') }}">Booking Calendar</a></li>
-                            <li><a href="{{ url_for('user_manager') }}">User Manager</a></li>
-                            {% endif %}
-                            <li><a href="{{ url_for('instructors') }}">Our Instructors</a></li>
-                            <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                        <li><a href="{{ url_for('instructors') }}">Our Instructors</a></li>
+                        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
                         {% else %}
                         <li><a href="{{ url_for('instructors') }}">Our Instructors</a></li>
                         <li><a href="{{ url_for('login') }}">Log In</a></li>
                         <li><a href="{{ url_for('register') }}">Create Account</a></li>
-                        
-                    {% endif %}
-                    
-                </ul>
-            </div>
-        </nav>
 
-        <!-- mobile sidenav -->
-        <ul class="sidenav" id="mobile-demo">
-            <li>
-                <h4 class="center-align light-blue-text text-darken 4">Driving Lesson Booking</h4>
-            </li>
-            <li><a href="{{ url_for('home') }}">Home</a></li>
-            <li><a href="{{ url_for('instructors') }}">Our Instructors</a></li>
-            {% if session.user %}
-            <li><a href="{{ url_for('book_lesson') }}">Book a Lesson</a></li>
-            <li><a href="{{ url_for('view_bookings') }}">My Bookings</a></li>
-            {% if account_type == "instructor"%}
-            <li><a href="{{ url_for('booking_calendar') }}">Booking Calendar</a></li>
-            {% endif %}
-            {% if account_type == "admin" %}
-            <li><a href="{{ url_for('booking_calendar') }}">Booking Calendar</a></li>
-            <li><a href="{{ url_for('user_manager') }}">User Manager</a></li>
-            {% endif %}
-
-            <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-            {% else %}
-            <li><a href="{{ url_for('login') }}">Log In</a></li>
-            <li><a href="{{ url_for('register') }}">Create Account</a></li>
-            {% endif %}
-        </ul>
-    </header>
-
-    <section>
-        <!-- flash messages -->
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        {% for message in messages %}
-        <div class="row flashes">
-            <h4 class="light-blue lighten-4 center-align">{{ message }}</h4>
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
-    </section>
-
-    <main class="container">
-        {% block content %}
-        {% endblock %}
-    </main>
-
-    <footer class="page-footer grey darken-1">
-        <div class="container">
-            <div class="row valign-wrapper">
-                <div class="col s12 m6">
-                    <div class="col"><i class="fas fa-phone"></i> 0111198760542</div>
-                    <div class="col"><i class="fas fa-envelope"></i> DLB@gmail.com</div>
+                        {% endif %}
+                    </ul>
                 </div>
+            </nav>
 
-                <div class="col s12 m6 ">
-                    <div class="col s4 m2 right"><a href="https://facebook.com" target="_blank"><i class="fab fa-facebook fa-2x"></i></a></div>
-                    <div class="col s4 m2 right"><a href="https://twitter.com" target="_blank"><i class="fab fa-twitter fa-2x"></i></a></div>
-                    <div class="col s4 m2 right"><a href="https://instagram.com" target="_blank"><i class="fab fa-instagram fa-2x"></i></a></div>
-                </div>
+            <!-- mobile sidenav -->
+            <ul class="sidenav" id="mobile-demo">
+                <li>
+                    <h4 class="center-align light-blue-text text-darken 4">Driving Lesson Booking</h4>
+                </li>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('instructors') }}">Our Instructors</a></li>
+                {% if session.user %}
+                <li><a href="{{ url_for('book_lesson') }}">Book a Lesson</a></li>
+                <li><a href="{{ url_for('view_bookings') }}">My Bookings</a></li>
+                {% if account_type == "instructor"%}
+                <li><a href="{{ url_for('booking_calendar') }}">Booking Calendar</a></li>
+                {% endif %} {% if account_type == "admin" %}
+                <li><a href="{{ url_for('booking_calendar') }}">Booking Calendar</a></li>
+                <li><a href="{{ url_for('user_manager') }}">User Manager</a></li>
+                {% endif %}
+
+                <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                {% else %}
+                <li><a href="{{ url_for('login') }}">Log In</a></li>
+                <li><a href="{{ url_for('register') }}">Create Account</a></li>
+                {% endif %}
+            </ul>
+        </header>
+
+        <section>
+            <!-- flash messages -->
+            {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+            <div class="row flashes">
+                <h4 class="light-blue lighten-4 center-align">{{ message }}</h4>
             </div>
-        </div>
-        <div class="footer-copyright">
+            {% endfor %} {% endif %} {% endwith %}
+        </section>
+
+        <main class="container">
+            {% block content %} {% endblock %}
+        </main>
+
+        <footer class="page-footer grey darken-1">
             <div class="container">
-                <p class="copyright text-muted">&copy; Driving Lesson Booking <span id="copyright"></span></p>
+                <div class="row valign-wrapper">
+                    <div class="col s12 m6">
+                        <div class="col"><i class="fas fa-phone"></i> 0111198760542</div>
+                        <div class="col"><i class="fas fa-envelope"></i> DLB@gmail.com</div>
+                    </div>
+
+                    <div class="col s12 m6">
+                        <div class="col s4 m2 right">
+                            <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook fa-2x"></i></a>
+                        </div>
+                        <div class="col s4 m2 right">
+                            <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter fa-2x"></i></a>
+                        </div>
+                        <div class="col s4 m2 right">
+                            <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </footer>
-
-</body>
-
+            <div class="footer-copyright">
+                <div class="container">
+                    <p class="copyright text-muted">&copy; Driving Lesson Booking <span id="copyright"></span></p>
+                </div>
+            </div>
+        </footer>
+    </body>
 </html>

@@ -1,48 +1,39 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <h1 class="center-align">Your Bookings</h1>
 
 <div class="center-align">
-
-
-  {% if bookings|length > 0 %}
-
-  {% for booking in bookings %}
+    {% if bookings|length > 0 %} {% for booking in bookings %}
 
     <div class="col s12 m8">
-      <div class="card blue-grey darken-1">
-        <div class="card-content white-text left-align">
-          <span class="card-title"><strong>{{ booking.instructor_first_name |capitalize }} {{ booking.instructor_last_name |capitalize }}</strong> : {{ booking.date }}</span>
-          <strong>Instructor: {{ booking.instructor_first_name |capitalize }} {{ booking.instructor_last_name |capitalize }}</strong>
-          <p>Date: {{ booking.date }}</p>
-          <p>Time: {{ booking.time_slot }}</p>
-          <p>Details: {{ booking.optional_details }}</p>
+        <div class="card blue-grey darken-1">
+            <div class="card-content white-text left-align">
+                <span class="card-title"><strong>{{ booking.instructor_first_name |capitalize }} {{ booking.instructor_last_name |capitalize }}</strong> : {{ booking.date }}</span>
+                <strong>Instructor: {{ booking.instructor_first_name |capitalize }} {{ booking.instructor_last_name |capitalize }}</strong>
+                <p>Date: {{ booking.date }}</p>
+                <p>Time: {{ booking.time_slot }}</p>
+                <p>Details: {{ booking.optional_details }}</p>
+            </div>
+            <div class="card-action right-align">
+                {% if booking.lesson_completed %} {% else %}
+                <a class="waves-effect waves-light red btn modal-trigger" href="#cancelModal{{ booking._id }}">Cancel</a>
+                {% endif %}
+            </div>
         </div>
-        <div class="card-action right-align">
-          {% if booking.lesson_completed %}
-          {% else %}
-          <a class="waves-effect waves-light red btn modal-trigger" href="#cancelModal{{ booking._id }}">Cancel</a>
-          {% endif %}
+    </div>
+
+    <div id="cancelModal{{ booking._id }}" class="modal center-align">
+        <div class="modal-content">
+            <h4>Cancel Booking</h4>
+            <p>Are you sure you want to cancel your booking on the {{ booking.date }} with {{ booking.instructor|capitalize }}?</p>
         </div>
-      </div>
+        <div class="modal-footer">
+            <a href="{{ url_for('cancel_booking', booking_id=booking._id) }}" class="modal-close waves-effect waves-light btn-small">Cancel</a>
+        </div>
     </div>
 
-
-  <div id="cancelModal{{ booking._id }}" class="modal center-align">
-    <div class="modal-content">
-      <h4>Cancel Booking</h4>
-      <p>Are you sure you want to cancel your booking on the {{ booking.date }} with {{ booking.instructor|capitalize }}?</p>
-    </div>
-    <div class="modal-footer">
-      <a href="{{ url_for('cancel_booking', booking_id=booking._id) }}" class="modal-close waves-effect waves-light btn-small">Cancel</a>
-    </div>
-  </div>
-
-  {% endfor %}
-
-  {% else %}
-  <h3 class="red-text text-darken-4 center-align">No Results Found</h3>
-  {% endif %}
+    {% endfor %} {% else %}
+    <h3 class="red-text text-darken-4 center-align">No Results Found</h3>
+    {% endif %}
 </div>
 {% endblock %}

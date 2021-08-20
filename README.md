@@ -298,6 +298,24 @@ Restriction code:
     This function will take in a list of the bookings that has been sorted by date already by using `.sort('date')` it then checks the bookings if `'lesson_completed' == True` on the booking and adds it to the completed_lessons list and removes it from the bookings list. At first i was having trouble as when you remove something from a list it resets the position of all the bookings in the list meening it would skip over every other booking and not check if it was completed. luckily I found the solution on [this Stack Overflow page](https://stackoverflow.com/questions/14267722/python-list-remove-skips-next-element-in-list) saying that if you used `reversed()` you can skip over this problem because you start itterating from the end so any bookings that are left to be changed don't change list position.
 
 
+#### Light house testing:
+
+Theese are the results of the tests 
+
+![Home lighthouse test](assets/lighthouse_testing/home_lighthouse.png)
+![View Bookings lighthouse test](assets/lighthouse_testing/view_bookings_lighhouse.png)
+![Booking callender lighthouse test](assets/lighthouse_testing/booking_callender_lighthouse.PNG)
+![Book Lesson lighthouse test](assets/lighthouse_testing/book_lesson_lighthouse.png)
+![User Manager lighthouse test](assets/lighthouse_testing/user_manager_lighthouse.png)
+![Instructors page lighthouse test](assets/lighthouse_testing/instructors_lighthouse.png)
+
+#### Code Validatorsalidators
+
+* [PEP8 Python](http://pep8online.com/checkresult#)
+* [W3C CSS](https://jigsaw.w3.org/css-validator/validator)
+* [jshint JS](https://jshint.com/)
+* [jshint JS(stepper code)](https://jshint.com/)
+
 ## Deployment
 
 This is how I deployed my project to Github and Heroku

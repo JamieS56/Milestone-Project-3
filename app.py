@@ -1,12 +1,11 @@
 import os
 from flask import (
-    Flask, flash, render_template, abort, json,
+    Flask, flash, render_template,
     redirect, jsonify, request, session, url_for)
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
-from datetime import date, datetime
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.exceptions import HTTPException
 if os.path.exists("env.py"):
     import env
 
@@ -68,12 +67,12 @@ def sort_booking_list(bookings):
             completed_lessons.append(completed_lesson)
             bookings.remove(booking)
 
-
     for completed_lesson in completed_lessons:
         bookings.append(completed_lesson)
 
     return bookings
-                
+
+
 # Home page
 @app.route("/")
 @app.route("/home")
@@ -247,13 +246,12 @@ def view_bookings():
     username = session["user"]
     update_bookings()
     bookings = sort_booking_list(list(mongo.db.bookings.find({'student': username}).sort('date')))  # Finds all bookings under the students name
-    completed_lessons = []
     # Changes the instructors username to there actual name when users view there booked lessons.
     for booking in bookings:
         booking['date'] = date_format(booking["date"])
         instructor = mongo.db.users.find_one({'username': booking["instructor"]}, {'first_name': 1, 'last_name': 1})
-        booking['instructor_first_name'] = instructor['first_name'] 
-        booking["instructor_last_name"] =  instructor['last_name']
+        booking['instructor_first_name'] = instructor['first_name']
+        booking["instructor_last_name"] = instructor['last_name']
 
     return render_template("view_bookings.html", username=username, bookings=bookings, account_type=get_user_account_type())
 
@@ -273,7 +271,6 @@ def booking_calendar():
         user_account_type = get_user_account_type()
         users = get_users()
         bookings = []
-        completed_lessons = []
         # shows all booked lessons for the instructor that is logged in or if an admin is logged in they can see all the bookings.
         if user_account_type == 'admin':
             bookings = sort_booking_list(list(mongo.db.bookings.find().sort('date')))
@@ -312,8 +309,6 @@ def edit_booking(booking_id):
     account_type = get_user_account_type()
     if account_type == 'student':
         return redirect(url_for('home'))
-
-    username = session["user"]
 
     if request.method == "POST":
         flash_msg = ""
@@ -363,6 +358,7 @@ def cancel_booking(booking_id):
 
     return redirect(url_for('booking_calendar'))
 
+
 # User manager page
 @app.route("/users/manage", methods=["GET", "POST"])
 def user_manager():
@@ -406,6 +402,7 @@ def edit_user(user_id):
 
     return redirect(url_for("user_manager"))
 
+
 # user search function
 @app.route("/search", methods=["GET", "POST"])
 def search():
@@ -431,7 +428,6 @@ def search_booking():
     user_account_type = get_user_account_type()
     update_bookings()
     users = get_users()
-    completed_lessons = []
     query = request.form.get("query")
     # returns booking calaender so same checks about which instructor, or if an admin is logged in are made
     if user_account_type == 'admin':
@@ -470,7 +466,6 @@ def instructors():
     instructors = list(mongo.db.users.find({"account_type": "instructor"}))
 
     return render_template('instructors.html', account_type=account_type, instructors=instructors)
-
 
 
 @app.errorhandler(404)
