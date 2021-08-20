@@ -20,7 +20,10 @@
           <p>Details: {{ booking.optional_details }}</p>
         </div>
         <div class="card-action right-align">
+          {% if booking.lesson_completed %}
+          {% else %}
           <a class="waves-effect waves-light red btn modal-trigger" href="#cancelModal{{ booking._id }}">Cancel</a>
+          {% endif %}
         </div>
       </div>
     </div>

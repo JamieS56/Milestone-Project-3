@@ -42,6 +42,38 @@ def get_users():
     return users
 
 
+def update_bookings():
+
+    bookings = list(mongo.db.bookings.find())
+    for booking in bookings:
+        if booking['date'] <= datetime.now():
+            mongo.db.bookings.update({'_id': booking['_id']}, {"$set": {"lesson_completed": True}})
+
+
+def date_format(e):
+    year = e.strftime("%Y")
+    month = e.strftime("%m")
+    day = e.strftime("%d")
+    new_date = "{}/{}/{}".format(day, month, year)
+    return new_date
+
+
+def sort_booking_list(bookings):
+
+    completed_lessons = []
+
+    for booking in reversed(bookings):
+        if booking['lesson_completed']:
+            completed_lesson = booking.copy()
+            completed_lessons.append(completed_lesson)
+            bookings.remove(booking)
+            # continue
+
+    for completed_lesson in completed_lessons:
+        bookings.append(completed_lesson)
+
+    return bookings
+                
 # Home page
 @app.route("/")
 @app.route("/home")
@@ -150,8 +182,6 @@ def book_lesson():
 
     # Booking form data that gets written to db
     if request.method == "POST":
-        print(request.form.get("instructor"))
-        print(request.form.get("date"))
 
         flash_msg = ""
         if request.form.get('time_slot') is None:
@@ -170,9 +200,9 @@ def book_lesson():
             'student': session['user'],
             'date': datetime.strptime(request.form.get("date"), "%d/%m/%Y"),
             'time_slot': request.form.get('time_slot'),
-            'optional_details': request.form.get('optional_details')
+            'optional_details': request.form.get('optional_details'),
+            'lesson_completed': False
           }
-        print(booking)
 
         mongo.db.bookings.insert_one(booking)
         flash('Booking Succesfull')
@@ -215,8 +245,9 @@ def view_bookings():
         return redirect(url_for("login"))
 
     username = session["user"]
-    bookings = list(mongo.db.bookings.find({'student': username}).sort('date'))  # Finds all bookings under the students name
-
+    update_bookings()
+    bookings = sort_booking_list(list(mongo.db.bookings.find({'student': username}).sort('date')))  # Finds all bookings under the students name
+    completed_lessons = []
     # Changes the instructors username to there actual name when users view there booked lessons.
     for booking in bookings:
         booking['date'] = date_format(booking["date"])
@@ -235,18 +266,19 @@ def booking_calendar():
         return redirect(url_for("login"))
 
     account_type = get_user_account_type()
+    update_bookings()
 
     if account_type == 'instructor' or account_type == 'admin':
         username = session["user"]
         user_account_type = get_user_account_type()
         users = get_users()
         bookings = []
+        completed_lessons = []
         # shows all booked lessons for the instructor that is logged in or if an admin is logged in they can see all the bookings.
         if user_account_type == 'admin':
-            bookings = list(mongo.db.bookings.find().sort('date'))
-            
+            bookings = sort_booking_list(list(mongo.db.bookings.find().sort('date')))
+
             for booking in bookings:
-                print(booking['date'])
                 booking['date'] = date_format(booking["date"])
                 for user in users:
                     if user['username'] == booking['student']:
@@ -255,7 +287,8 @@ def booking_calendar():
                         booking['student_first_name'] = user['first_name']
                         booking['student_last_name'] = user['last_name']
         else:
-            bookings = list(mongo.db.bookings.find({'instructor': username}).sort('date'))
+            bookings = sort_booking_list(list(mongo.db.bookings.find({'instructor': username}).sort('date')))
+
             for booking in bookings:
                 booking['date'] = date_format(booking["date"])
                 for user in users:
@@ -269,14 +302,6 @@ def booking_calendar():
 
     else:
         return redirect(url_for('home'))
-
-
-def date_format(e):
-    year = e.strftime("%Y")
-    month = e.strftime("%m")
-    day = e.strftime("%d")
-    new_date = "{}/{}/{}".format(day, month, year)
-    return new_date
 
 
 @app.route("/booking/<booking_id>/edit", methods=["GET", "POST"])
@@ -309,7 +334,8 @@ def edit_booking(booking_id):
                 'student': current_booking['student'],
                 'date': datetime.strptime(request.form.get("date"), "%d/%m/%Y"),
                 'time_slot': request.form.get('time_slot'),
-                'optional_details': request.form.get('optional_details')
+                'optional_details': request.form.get('optional_details'),
+                'lesson_completed': False
             }
 
             mongo.db.bookings.update({"_id": ObjectId(booking_id)}, booking)
@@ -402,13 +428,34 @@ def search_booking():
         return redirect(url_for('home'))
 
     username = session['user']
-    user_account_type = mongo.db.users.find_one({"username": username})["account_type"]
+    user_account_type = get_user_account_type()
+    update_bookings()
+    users = get_users()
+    completed_lessons = []
     query = request.form.get("query")
     # returns booking calaender so same checks about which instructor, or if an admin is logged in are made
     if user_account_type == 'admin':
-        bookings = list(mongo.db.bookings.find({"$text": {"$search": query}}).sort('date'))
+        bookings = sort_booking_list(list(mongo.db.bookings.find({"$text": {"$search": query}}).sort('date')))
+
+        for booking in bookings:
+            booking['date'] = date_format(booking["date"])
+            for user in users:
+                if user['username'] == booking['student']:
+                    booking['student_phone'] = user['phone_number']
+                    booking['student_email'] = user['email']
+                    booking['student_first_name'] = user['first_name']
+                    booking['student_last_name'] = user['last_name']
     else:
-        bookings = list(mongo.db.bookings.find({"$text": {"$search": query}, 'instructor': username}))
+        bookings = sort_booking_list(list(mongo.db.bookings.find({"$text": {"$search": query}, 'instructor': username}).sort("date")))
+
+        for booking in bookings:
+            booking['date'] = date_format(booking["date"])
+            for user in users:
+                if user['username'] == booking['student']:
+                    booking['student_phone'] = user['phone_number']
+                    booking['student_email'] = user['email']
+                    booking['student_first_name'] = user['first_name']
+                    booking['student_last_name'] = user['last_name']
 
     return render_template("booking_calendar.html", bookings=bookings, account_type=get_user_account_type())
 

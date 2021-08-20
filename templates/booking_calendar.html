@@ -35,9 +35,12 @@
             <p>Student phone: {{ booking.student_phone }}</p>
         </div>
         <div class="card-action right-align">
+            {% if booking.lesson_completed %}
+            {% else %}
             <a class="waves-effect waves-light light-blue lighten-1 btn modal-trigger"
                 href="#editModal{{ booking._id }}">Edit</a>
             <a class="waves-effect waves-light red btn modal-trigger" href="#cancelModal{{ booking._id }}">Cancel</a>
+            {% endif %}
         </div>
     </div>
 </div>
