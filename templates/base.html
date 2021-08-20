@@ -46,23 +46,26 @@
                 <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
                 <ul class="right hide-on-med-and-down">
                     <li><a href="{{ url_for('home') }}">Home</a></li>
-                    <li><a href="{{ url_for('instructors') }}">Our Instructors</a></li>
+                    
                     {% if session.user %}
-                    <li><a href="{{ url_for('book_lesson') }}">Book a Lesson</a></li>
-                    <li><a href="{{ url_for('view_bookings') }}">My Bookings</a></li>
-                    {% if account_type == "instructor"%}
-                    <li><a href="{{ url_for('booking_calendar') }}">Booking Calendar</a></li>
+                        <li><a href="{{ url_for('book_lesson') }}">Book a Lesson</a></li>
+                        <li><a href="{{ url_for('view_bookings') }}">My Bookings</a></li>
+                        {% if account_type == "instructor"%}
+                            <li><a href="{{ url_for('booking_calendar') }}">Booking Calendar</a></li>
+                        {% endif %}
+                        {% if account_type == "admin" %}
+                            <li><a href="{{ url_for('booking_calendar') }}">Booking Calendar</a></li>
+                            <li><a href="{{ url_for('user_manager') }}">User Manager</a></li>
+                            {% endif %}
+                            <li><a href="{{ url_for('instructors') }}">Our Instructors</a></li>
+                            <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                        {% else %}
+                        <li><a href="{{ url_for('instructors') }}">Our Instructors</a></li>
+                        <li><a href="{{ url_for('login') }}">Log In</a></li>
+                        <li><a href="{{ url_for('register') }}">Create Account</a></li>
+                        
                     {% endif %}
-                    {% if account_type == "admin" %}
-                    <li><a href="{{ url_for('booking_calendar') }}">Booking Calendar</a></li>
-                    <li><a href="{{ url_for('user_manager') }}">User Manager</a></li>
-                    {% endif %}
-
-                    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-                    {% else %}
-                    <li><a href="{{ url_for('login') }}">Log In</a></li>
-                    <li><a href="{{ url_for('register') }}">Create Account</a></li>
-                    {% endif %}
+                    
                 </ul>
             </div>
         </nav>

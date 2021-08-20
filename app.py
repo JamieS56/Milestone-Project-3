@@ -67,7 +67,7 @@ def sort_booking_list(bookings):
             completed_lesson = booking.copy()
             completed_lessons.append(completed_lesson)
             bookings.remove(booking)
-            # continue
+
 
     for completed_lesson in completed_lessons:
         bookings.append(completed_lesson)
