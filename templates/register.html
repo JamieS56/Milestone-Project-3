@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block content %}
 
-<h1>Create Account</h1>
+<h1 class="center-align">Create Account</h1>
 
 <div class="row">
     <form class="col s12" method="POST" action="{{ url_for('register') }}">
@@ -47,7 +47,7 @@
         </div>
     </form>
 </div>
-<div class="row">
+<div class="row center-align">
     <a href='{{ url_for("login") }}'>already have an account? Login!</a>
 </div>
 
