@@ -380,11 +380,10 @@ def edit_user(user_id):
     if request.method == "POST":
         try:
 
-            # Finds which user there edditing
+            # Finds which user there editing
             current_user = mongo.db.users.find_one(
                 {"_id": ObjectId(user_id)})
             # The edited data
-            print(request.form.get("account_type"))
             submit = {
                 "username": request.form.get("username").lower(),
                 'password': current_user['password'],
@@ -476,4 +475,4 @@ def page_not_found(e):
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"), port=int(os.environ.get("PORT")),
-    debug=True)
+    debug=False)

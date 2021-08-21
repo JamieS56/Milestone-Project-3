@@ -359,11 +359,18 @@ Restriction code:
 These are the results of the tests.
 
 ![Home lighthouse test](assets/lighthouse_testing/home_lighthouse.png)
-![View Bookings lighthouse test](assets/lighthouse_testing/view_bookings_lighhouse.png)
-![Booking callender lighthouse test](assets/lighthouse_testing/booking_callender_lighthouse.PNG)
-![Book Lesson lighthouse test](assets/lighthouse_testing/book_lesson_lighthouse.png)
+
+![View Bookings lighthouse test](assets/lighthouse_testing/view_bookigs_lighthouse.png)
+
+![Booking callender lighthouse test](assets/lighthouse_testing/booking_callendar_lighhouse.png)
+
+![Book Lesson lighthouse test](assets/lighthouse_testing/book_lesson.png)
+
 ![User Manager lighthouse test](assets/lighthouse_testing/user_manager_lighthouse.png)
+
 ![Instructors page lighthouse test](assets/lighthouse_testing/instructors_lighthouse.png)
+
+
 
 ### Code Validators
 

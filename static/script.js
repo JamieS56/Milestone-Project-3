@@ -14,7 +14,7 @@ $(document).ready(function () {
         i18n: {
             done: "Select",
         },
-        // minDate: today,
+        minDate: new Date(),
         autoClose: true,
     });
 
